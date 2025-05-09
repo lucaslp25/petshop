@@ -13,6 +13,8 @@ public class Funcionario {
     private List<Agendamento> agendamentos = new ArrayList<>();
     //agendamentos de um funcionario
 
+    //Se um funcionario tem varios agendamentos, e cada agendamento tem um fucionario, cabe mais eu colocar na tabela de agendamentos o funcionario como uma chave estrangeira, do que colocar vários agendamentos como chave estrangeira da tabela do funcionario!
+
     public Funcionario() {
     }
     public Funcionario( String nome, TiposDeCargoFuncionario cargoFuncionario) {
@@ -41,7 +43,6 @@ public class Funcionario {
     public List<Agendamento> getAgendamentos() {
         return agendamentos;
     }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -56,5 +57,4 @@ public class Funcionario {
         }
         return sb.toString();
     }
-
 }

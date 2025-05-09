@@ -26,4 +26,9 @@ public class MetodoDePagamento {
         this.tipoDePagamento = tipoDePagamento;
     }
 
+    @Override
+    public String toString(){
+        return tipoDePagamento.toString();
+    }
+
 }

@@ -9,7 +9,6 @@ public class ServicoVacinacao extends Servicos {
 
     private TiposDeVacinacao tipoDeVacinacao;
 
-
     public ServicoVacinacao() {
         super();
         this.id = null;

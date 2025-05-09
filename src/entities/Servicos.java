@@ -57,5 +57,4 @@ public abstract class Servicos {
     public String toString(){
         return nome + " | " + descricao+ " | R$" + preco + " - "+duracao + "\n";
     }
-
 }

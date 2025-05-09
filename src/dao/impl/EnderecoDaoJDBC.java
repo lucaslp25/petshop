@@ -54,7 +54,7 @@ public class EnderecoDaoJDBC implements EnderecoDao {
     @Override
     public void updateEndereco(Endereco endereco) {
 
-        String sql = "UPTADE endereco " +
+        String sql = "UPDATE endereco " +
                 "SET rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, cep = ?, complemento = ?" +
                 "WHERE id = ?";
 

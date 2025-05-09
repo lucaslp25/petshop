@@ -37,13 +37,8 @@ public class ServicoConsultaVeterinaria extends Servicos{
         return "CONSULTA VETERINÁRIA";
     }
 
-
     @Override
     public String toString() {
         return super.toString() + "Tipo de serviço: Consulta veterinária | Tipo de Consulta: " +tipoDeConsulta.toString();
     }
-
-
-
-
 }

@@ -161,7 +161,6 @@ public class ClienteDaoJDBC implements ClienteDao {
             DB.closeStatement(st);
             DB.closeResultSet(rs);
         }
-
     }
 
     @Override

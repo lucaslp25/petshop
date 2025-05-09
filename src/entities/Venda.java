@@ -9,18 +9,17 @@ public class Venda {
     private Double valorTotal;
     private Cliente cliente;
 
-  //  private MetodoDePagamento meioDepagamento;
+    private MetodoDePagamento meioDepagamento;
     private List<ItemVenda> itensVendidos;
 
     public Venda() {
-
     }
 
-    public Venda (LocalDate dataVenda, Double valorTotal, Cliente cliente) {
+    public Venda (LocalDate dataVenda, Double valorTotal, Cliente cliente, MetodoDePagamento meioDepagamento) {
         this.dataVenda = dataVenda;
         this.valorTotal = valorTotal;
         this.cliente = cliente;
-  //      this.meioDepagamento = null;
+        this.meioDepagamento = meioDepagamento;
         this.id = null;
     }
     public Integer getId() {
@@ -47,17 +46,22 @@ public class Venda {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
+    public MetodoDePagamento getMeioDepagamento(){
+        return meioDepagamento;
+    }
+    public void setMeioDePagamento(MetodoDePagamento metodoDePagamento){
+        this.meioDepagamento = meioDepagamento;
+    }
 
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("Venda ID: " + getId() + "\n");
         sb.append("Data Venda: " + getDataVenda() + "\n");
-        sb.append("Cliente: " + getCliente().getNome() + "\n");
-
-
-        //adicionar mais coisas aqui depois...
-
+        sb.append("Cliente: " + getCliente().toString() + "\n");
+        if (meioDepagamento != null){
+            sb.append("Meio Depagamento: " + getMeioDepagamento().toString() + "\n");
+        }
         return sb.toString();
     }
 

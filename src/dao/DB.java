@@ -28,6 +28,7 @@ public class DB {
                 //aqui irei pegar as propriedades do banco de dados contido no arquivo properties!
                 String url = props.getProperty("dburl");
                 conn = DriverManager.getConnection(url, props);
+
                 //passando para o drive a url do banco de dados(que contem todo o caminho ate ela), e as propriedades do arquivo, como usuario e senha!
             }catch (SQLException e){
                 throw new DbExceptions(e.getMessage()); //mais uma vez lançando minha exceção personalizada!

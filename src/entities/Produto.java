@@ -74,4 +74,19 @@ public class Produto {
         this.categoria = categoria;
     }
 
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Nome: " + nome + "\n");
+        sb.append("Descricao: " + descricao + "\n");
+        sb.append("Preco de Custo: " + precoDeCusto + "\n");
+        sb.append("Preco de Venda: " + precoDeVenda + "\n");
+        sb.append("Quantidade Estoque: " + quantidadeEstoque + "\n");
+        sb.append("Fornecedor: " + fornecedor + "\n");
+        sb.append("Categoria: " + categoria.name() + "\n");
+
+        return sb.toString();
+    }
+
+
 }

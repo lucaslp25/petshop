@@ -13,5 +13,4 @@ public interface PetDao {
     List<Pet> findByClienteId(Integer id);
     List<Pet> findAll();
 
-
 }

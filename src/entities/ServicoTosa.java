@@ -47,5 +47,4 @@ public class ServicoTosa extends Servicos {
     public String toString() {
         return super.toString() + "Tipo de serviço: Tosa | Escovação inclusa: " +incluiEscovacao + ", Banho prévio incluso: " + incluiBanhoPrevio;
     }
-
 }
