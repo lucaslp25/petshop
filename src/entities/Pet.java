@@ -8,6 +8,7 @@ public class Pet {
     private TiposDeEspecies especie;
     private String raca;
     private CategoriaDePorte porte;
+    private Integer idade;
 
     private Cliente dono;
 
@@ -15,12 +16,13 @@ public class Pet {
 
     public Pet(){
     }
-    public Pet(String nome, TiposDeEspecies especie, String raca,CategoriaDePorte porte,Cliente dono) {
+    public Pet(String nome, TiposDeEspecies especie, String raca,CategoriaDePorte porte,Cliente dono, Integer idade) {
         this.nome = nome;
         this.especie = especie;
         this.raca = raca;
         this.dono = dono;
         this.porte = porte;
+        this.idade = idade;
         this.id = null;
     }
 
@@ -60,10 +62,16 @@ public class Pet {
     public void setPorte(CategoriaDePorte porte) {
         this.porte = porte;
     }
+    public Integer getIdade() {
+        return idade;
+    }
+    public void setIdade(Integer idade) {
+        this.idade = idade;
+    }
 
     @Override
     public String toString() {
-        return "\n"+ "Nome: "+nome + " | Espécie: " + especie + " | Raça: " + raca +  "\nResponsável: " + dono.getNome();
+        return "\n"+ "Nome: "+nome + "Idade: "+idade+" | Espécie: " + especie + " | Raça: " + raca +  "\nResponsável: " + dono.getNome();
     }
 
 }

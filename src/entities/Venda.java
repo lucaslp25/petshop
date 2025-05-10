@@ -1,5 +1,7 @@
 package entities;
 
+import enums.TipoDePagamento;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -8,18 +10,19 @@ public class Venda {
     private LocalDate dataVenda;
     private Double valorTotal;
     private Cliente cliente;
-
-    private MetodoDePagamento meioDepagamento;
+    private Integer metodoPagamentoId;
+    private TipoDePagamento tipoPagamento;
+  //  private MetodoDePagamento meioDepagamento; mudança de lógica...
     private List<ItemVenda> itensVendidos;
 
     public Venda() {
     }
 
-    public Venda (LocalDate dataVenda, Double valorTotal, Cliente cliente, MetodoDePagamento meioDepagamento) {
+    public Venda (LocalDate dataVenda, Double valorTotal, Cliente cliente, Integer metodoPagamentoId) {
         this.dataVenda = dataVenda;
         this.valorTotal = valorTotal;
         this.cliente = cliente;
-        this.meioDepagamento = meioDepagamento;
+        this.metodoPagamentoId = metodoPagamentoId;
         this.id = null;
     }
     public Integer getId() {
@@ -46,11 +49,17 @@ public class Venda {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
-    public MetodoDePagamento getMeioDepagamento(){
-        return meioDepagamento;
+    public Integer getMetodoPagamentoId(){
+        return metodoPagamentoId;
     }
-    public void setMeioDePagamento(MetodoDePagamento metodoDePagamento){
-        this.meioDepagamento = meioDepagamento;
+    public void setMetodoPagamentoId(Integer metodoPagamentoId){
+        this.metodoPagamentoId = metodoPagamentoId;
+    }
+    public TipoDePagamento getTipoPagamento() {
+        return tipoPagamento;
+    }
+    public void setTipoPagamento(TipoDePagamento tipoPagamento) {
+        this.tipoPagamento = tipoPagamento;
     }
 
     @Override
@@ -59,9 +68,7 @@ public class Venda {
         sb.append("Venda ID: " + getId() + "\n");
         sb.append("Data Venda: " + getDataVenda() + "\n");
         sb.append("Cliente: " + getCliente().toString() + "\n");
-        if (meioDepagamento != null){
-            sb.append("Meio Depagamento: " + getMeioDepagamento().toString() + "\n");
-        }
+
         return sb.toString();
     }
 

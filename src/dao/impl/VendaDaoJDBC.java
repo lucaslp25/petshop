@@ -2,6 +2,7 @@ package dao.impl;
 
 import dao.DB;
 import dao.DbExceptions;
+import dao.MetodoDePagamentoDao;
 import dao.VendaDao;
 import entities.Cliente;
 import entities.Endereco;
@@ -19,13 +20,27 @@ import java.util.Map;
 public class VendaDaoJDBC implements VendaDao {
 
     private Connection conn;
+    private MetodoDePagamentoDao metodoDePagamentoDao;
 
-    public VendaDaoJDBC(Connection conn) {
+    public VendaDaoJDBC(Connection conn, MetodoDePagamentoDao metodoDePagamentoDao) {
         this.conn = conn;
+        this.metodoDePagamentoDao = metodoDePagamentoDao;
     }
 
     @Override
     public void insert(Venda venda) {
+
+        TipoDePagamento tipoPagamentoVenda = venda.getTipoPagamento();
+
+        MetodoDePagamento metodoPagamento = metodoDePagamentoDao.findByTipo(tipoPagamentoVenda);
+
+
+        if (metodoPagamento == null) {
+            throw new DbExceptions("Método de pagamento não encontrado: " + tipoPagamentoVenda);
+        }
+
+        venda.setMetodoPagamentoId(metodoPagamento.getId()); // Seta o ID na entidade Venda
+
 
         String sql = "INSERT INTO venda "
                 +"(data_venda, valor_total, cliente_id, metodo_pagamento_id) "
@@ -37,7 +52,7 @@ public class VendaDaoJDBC implements VendaDao {
             st.setDate(1, sqlDate);
             st.setDouble(2, venda.getValorTotal());
             st.setInt(3, venda.getCliente().GetId());
-            st.setInt(4, venda.getMeioDepagamento().getId());
+            st.setInt(4, venda.getMetodoPagamentoId());
 
             int rows = st.executeUpdate();
             if(rows > 0){
@@ -69,7 +84,7 @@ public class VendaDaoJDBC implements VendaDao {
             st.setDate(1, sqlDate);
             st.setDouble(2, venda.getValorTotal());
             st.setInt(3, venda.getCliente().GetId());
-            st.setInt(4, venda.getMeioDepagamento().getId());
+            st.setInt(4, venda.getMetodoPagamentoId());
 
             st.executeUpdate();
             System.out.println("Atualização de venda feita com sucesso!");
@@ -138,7 +153,7 @@ public class VendaDaoJDBC implements VendaDao {
                 Endereco endereco = instantiateEndereco(rs);
                 Cliente cliente = instantiateCliente(rs, endereco);
                 MetodoDePagamento metodoDePagamento = instantiateMetodoDePagamento(rs);
-                Venda venda = instantiateVenda(rs, cliente, metodoDePagamento);
+                Venda venda = instantiateVenda(rs, cliente);
                 return venda;
             }
             return null;
@@ -216,7 +231,7 @@ public class VendaDaoJDBC implements VendaDao {
                     metodoDePagamentoMap.put(metodoDePagamentoId, metodoDePagamento);
                 }
 
-                Venda venda = instantiateVenda(rs, cliente, metodoDePagamento);
+                Venda venda = instantiateVenda(rs, cliente);
                 vendas.add(venda);
             }
             return vendas;
@@ -229,14 +244,14 @@ public class VendaDaoJDBC implements VendaDao {
         }
     }
 
-    private Venda instantiateVenda(ResultSet rs, Cliente cliente, MetodoDePagamento metodoDePagamento) throws SQLException {
+    private Venda instantiateVenda(ResultSet rs, Cliente cliente) throws SQLException {
         Venda venda = new Venda();
 
         venda.setId(rs.getInt("venda_id"));
         venda.setDataVenda(LocalDate.parse(rs.getString("data_Venda")));
         venda.setValorTotal(rs.getDouble("valor_total"));
         venda.setCliente(cliente);
-        venda.setMeioDePagamento(metodoDePagamento);
+        venda.setMetodoPagamentoId(rs.getInt("metodo_pagamento_id"));
         return venda;
     }
 

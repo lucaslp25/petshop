@@ -86,7 +86,9 @@ public class Cliente {
         sb.append("CPF: " + cpf + "\n");
         sb.append("Email: " + email + "\n");
         sb.append("Telefone: " + telefone + "\n");
-        sb.append("Endereço: " + endereco.toString());
+        if (endereco != null) {
+            sb.append("Endereço: " + endereco.toString());
+        }
         return sb.toString();
     }
 

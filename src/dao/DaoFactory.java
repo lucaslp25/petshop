@@ -41,5 +41,11 @@ public class DaoFactory {
     public static VendaDao createVendaDao() {
         return new VendaDaoJDBC(DB.getConnection());
     }
+    public static ItemVendaDao createItemVendaDao() {
+        return new ItemVendaDaoJDBC(DB.getConnection());
+    }
+    public static AgendamentoDao createAgendamentoDao() {
+        return new AgendamentoDaoJDBC(DB.getConnection());
+    }
 
 }

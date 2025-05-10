@@ -83,7 +83,9 @@ public class Produto {
         sb.append("Preco de Venda: " + precoDeVenda + "\n");
         sb.append("Quantidade Estoque: " + quantidadeEstoque + "\n");
         sb.append("Fornecedor: " + fornecedor + "\n");
-        sb.append("Categoria: " + categoria.name() + "\n");
+        if (categoria != null) {
+            sb.append("Categoria: " + categoria.toString() + "\n");
+        }
 
         return sb.toString();
     }

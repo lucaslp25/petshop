@@ -137,6 +137,36 @@ public class MetodoDePagamentoDaoJDBC implements MetodoDePagamentoDao {
             DB.closeResultSet(rs);
         }
     }
+
+    @Override
+    public MetodoDePagamento findByTipo(TipoDePagamento tipoDePagamento) {
+
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try{
+            String sql = "SELECT * " +
+                    "FROM metodo_pagamento " +
+                    "WHERE tipo = ? ";
+
+            st = conn.prepareStatement(sql);
+            st.setString(1, tipoDePagamento.name());
+
+            rs = st.executeQuery();
+
+            if (rs.next()){
+                MetodoDePagamento metodoDePagamento = instantiateMetodoDePagamento(rs);
+                return metodoDePagamento;
+            }
+            return null;
+        }catch (SQLException e){
+            throw new DbExceptions("Falha ao buscar método de pagamento por tipo: " + e.getMessage());
+        }finally {
+            DB.closeResultSet(rs);
+            DB.closeStatement(st);
+        }
+    }
+
     private MetodoDePagamento instantiateMetodoDePagamento(ResultSet rs)throws SQLException {
         MetodoDePagamento metodoDePagamento = new MetodoDePagamento();
         metodoDePagamento.setId(rs.getInt("id"));

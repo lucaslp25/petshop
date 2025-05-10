@@ -4,7 +4,6 @@ import dao.DB;
 import dao.DbExceptions;
 import dao.ServicoDao;
 import dao.ServicoTosaDao;
-import entities.ServicoBanho;
 import entities.ServicoTosa;
 
 import java.sql.*;

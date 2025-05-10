@@ -4,5 +4,6 @@ public enum TipoDePagamento {
     DINHEIRO,
     PIX,
     CARTAO_DE_CREDITO,
-    CARTAO_DE_DEBITO;
+    CARTAO_DE_DEBITO,
+    BOLETO;
 }

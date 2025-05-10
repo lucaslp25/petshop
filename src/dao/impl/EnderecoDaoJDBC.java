@@ -153,6 +153,41 @@ public class EnderecoDaoJDBC implements EnderecoDao {
             DB.closeStatement(st);
         }
     }
+
+    @Override
+    public Endereco findByUniqueAtributs(String rua, String numero, String bairro, String cidade, String estado, String cep, String complemento) {
+
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try{
+            String str = "SELECT id, rua, numero, bairro, cidade, estado, cep, complemento FROM endereco WHERE rua = ? AND numero = ? AND bairro = ? AND cidade = ? AND estado = ? AND cep = ? AND complemento = ? ";
+
+            st = conn.prepareStatement(str);
+
+            st.setString(1,rua);
+            st.setString(2,numero);
+            st.setString(3,bairro);
+            st.setString(4,cidade);
+            st.setString(5,estado);
+            st.setString(6,cep);
+            st.setString(7,complemento);
+
+            rs = st.executeQuery();
+
+            if(rs.next()){
+                Endereco endereco = instantiateEndereco(rs);
+                return endereco;
+            }
+            return null;
+        }catch (SQLException e){
+            throw new DbExceptions("Erro ao achar endereço: " + e.getMessage());
+        }finally {
+            DB.closeResultSet(rs);
+            DB.closeStatement(st);
+        }
+    }
+
     private Endereco instantiateEndereco(ResultSet rs) throws SQLException{
         Endereco endereco = new Endereco();
         endereco.setId(rs.getInt("id"));

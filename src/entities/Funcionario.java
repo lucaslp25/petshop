@@ -8,6 +8,9 @@ import java.util.List;
 public class Funcionario {
     private Integer id;
     private String nome;
+    private  Double salario;
+
+    private Endereco endereco;
     private TiposDeCargoFuncionario cargoFuncionario;
 
     private List<Agendamento> agendamentos = new ArrayList<>();
@@ -17,10 +20,12 @@ public class Funcionario {
 
     public Funcionario() {
     }
-    public Funcionario( String nome, TiposDeCargoFuncionario cargoFuncionario) {
+    public Funcionario( String nome, TiposDeCargoFuncionario cargoFuncionario, Endereco endereco, Double salario) {
         this.id = null;
         this.nome = nome;
         this.cargoFuncionario = cargoFuncionario;
+        this.endereco = endereco;
+        this.salario = salario;
     }
     public Integer getId() {
         return id;
@@ -40,6 +45,18 @@ public class Funcionario {
     public void setCargoFuncionario(TiposDeCargoFuncionario cargoFuncionario) {
         this.cargoFuncionario = cargoFuncionario;
     }
+    public Endereco getEndereco() {
+        return endereco;
+    }
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+    public Double getSalario() {
+        return salario;
+    }
+    public void setSalario(Double salario) {
+        this.salario = salario;
+    }
     public List<Agendamento> getAgendamentos() {
         return agendamentos;
     }
@@ -54,7 +71,11 @@ public class Funcionario {
             for (Agendamento agendamento : agendamentos) {
                 sb.append("  - ID: ").append(agendamento.getId()).append(", Data: ").append(agendamento.getDataAgendamento()).append(", Serviço: ").append(agendamento.getServicos().getNome()).append("\n");
             }
+
         }
+        sb.append("Salario: " + String.format("%.2f",salario) + "\n");
+        sb.append("Endereco: " + endereco.toString() + "\n");
+
         return sb.toString();
     }
 }

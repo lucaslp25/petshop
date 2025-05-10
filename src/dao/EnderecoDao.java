@@ -11,4 +11,5 @@ public interface EnderecoDao {
     void deleteById(Integer id);
     Endereco findById(Integer id);
     List<Endereco> findAll();
+    Endereco findByUniqueAtributs(String rua, String numero, String bairro, String cidade, String estado, String cep, String complemento);
 }

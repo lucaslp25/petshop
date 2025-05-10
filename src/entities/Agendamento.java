@@ -6,7 +6,9 @@ public class Agendamento {
 
     private Integer id;
     private LocalDate dataAgendamento;
+    private Double valor;
     private Servicos servicos;
+
 
     //polimorfismo vai pegar todas as subclasses de serviços para o agendamento
 
@@ -16,12 +18,13 @@ public class Agendamento {
 
     public Agendamento() {
     }
-    public Agendamento(LocalDate dataAgendamento, Servicos servicos, Pet pet, Funcionario funcionarioResponsavel) {
+    public Agendamento(LocalDate dataAgendamento, Servicos servicos, Pet pet, Funcionario funcionarioResponsavel, Double valor) {
         this.id = null;
         this.dataAgendamento = dataAgendamento;
         this.servicos = servicos;
         this.pet = pet;
         this.funcionarioResponsavel = funcionarioResponsavel;
+        this.valor = valor;
     }
     public Integer getId() {
         return id;
@@ -52,6 +55,12 @@ public class Agendamento {
     }
     public void setFuncionarioResponsavel(Funcionario funcionarioResponsavel) {
         this.funcionarioResponsavel = funcionarioResponsavel;
+    }
+    public Double getValor() {
+        return valor;
+    }
+    public void setValor(Double valor) {
+        this.valor = valor;
     }
 
     @Override
