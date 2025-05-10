@@ -12,6 +12,7 @@ public class Venda {
     private Cliente cliente;
     private Integer metodoPagamentoId;
     private TipoDePagamento tipoPagamento;
+
   //  private MetodoDePagamento meioDepagamento; mudança de lógica...
     private List<ItemVenda> itensVendidos;
 

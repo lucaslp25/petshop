@@ -39,7 +39,8 @@ public class DaoFactory {
         return new MetodoDePagamentoDaoJDBC(DB.getConnection());
     }
     public static VendaDao createVendaDao() {
-        return new VendaDaoJDBC(DB.getConnection());
+        MetodoDePagamentoDao metodoDePagamentoDao = createMetodoDePagamentoDao();
+        return new VendaDaoJDBC(DB.getConnection(), metodoDePagamentoDao);
     }
     public static ItemVendaDao createItemVendaDao() {
         return new ItemVendaDaoJDBC(DB.getConnection());

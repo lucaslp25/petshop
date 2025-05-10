@@ -30,3 +30,4 @@ bin/
 .DS_Store
 
 db.properties
+src/test/db.test.properties

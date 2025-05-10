@@ -5,5 +5,6 @@ public enum TipoDePagamento {
     PIX,
     CARTAO_DE_CREDITO,
     CARTAO_DE_DEBITO,
-    BOLETO;
+    BOLETO,
+    FIADO;    //TESTE DO JUNIT
 }

@@ -13,6 +13,8 @@ public class Main{
         //sistema para agendamentos, preciso dessas classes todas instanciadas necessariamente! Depois inserir todas elas no banco de dados e recuperalas com seu respectivo ID para conseguir colocar no agendamento !
 
         //fazer um commit e partir explorar jUnit para testes unitarios!
-        
+
+        //nova fase do projeto, toda estrutura adaptada ao maven e jUnits para fazer alguns testes no banco de dados isoladamente!
+
     }
 }

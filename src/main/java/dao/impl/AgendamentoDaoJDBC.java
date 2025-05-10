@@ -3,8 +3,11 @@ package dao.impl;
 import dao.AgendamentoDao;
 import dao.DB;
 import dao.DbExceptions;
-import entities.*;
 
+import entities.Agendamento;
+
+
+import entities.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -161,7 +164,6 @@ public class AgendamentoDaoJDBC implements AgendamentoDao {
         ResultSet rs = null;
 
         try{
-
 
             String sql = "SELECT " +
                     "a.id AS agendamento_id, " +
