@@ -14,5 +14,7 @@ public class Main{
 
         //fazer um commit e partir explorar jUnit para testes unitarios!
 
+        //nova fase do projeto, toda estrutura adaptada ao maven e jUnits para fazer alguns testes no banco de dados isoladamente!
+
     }
 }

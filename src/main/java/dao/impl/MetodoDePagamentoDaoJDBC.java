@@ -172,7 +172,10 @@ public class MetodoDePagamentoDaoJDBC implements MetodoDePagamentoDao {
         metodoDePagamento.setId(rs.getInt("id"));
         metodoDePagamento.setTipoDePagamento(TipoDePagamento.valueOf(rs.getString("tipo")));
 
+
         return metodoDePagamento;
+
+
 
         //OBS: tem duas formas de instanciar os objetos com esses metodos, estou usando essa maneira para essas classes que não foram herdadas, e para as outras classes que são subclasses de serviços eu usei um outro padrão de instanciação no metodo, porem os dois metodos fazem absolutamente a mesma coisa!
     }
