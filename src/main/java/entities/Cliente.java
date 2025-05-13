@@ -59,7 +59,7 @@ public class Cliente {
     public List<Pet> getPets() {
         return pets;
     }
-    public Integer GetId() {
+    public Integer getId() {
         return id;
     }
     public void setId(Integer id) {

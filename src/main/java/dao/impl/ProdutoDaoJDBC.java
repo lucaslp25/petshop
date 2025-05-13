@@ -169,4 +169,50 @@ public class ProdutoDaoJDBC implements ProdutoDao {
         }
 
     }
+
+    @Override
+    public Produto findByUniqueAtributs(String nome, String descricao, String fornecedor) {
+
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try{
+            String sql = "SELECT * FROM produto " +
+                    "WHERE nome = ? AND descricao = ? AND fornecedor = ? ";
+
+            st = conn.prepareStatement(sql);{
+
+                st.setString(1, nome);
+                st.setString(2, descricao);
+                st.setString(3, fornecedor);
+
+                rs = st.executeQuery();
+
+                if(rs.next()){
+                    Produto produto = instantiateProduto(rs);
+                    return produto;
+                }
+                return null;
+            }
+        } catch (SQLException e ){
+            throw new DbExceptions("Erro ao buscar produto: " + e.getMessage());
+        }finally{
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 }

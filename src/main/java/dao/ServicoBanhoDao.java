@@ -11,5 +11,6 @@ public interface ServicoBanhoDao {
     void deleteById(Integer id);
     ServicoBanho findById(Integer id);
     List<ServicoBanho> findAll();
+    ServicoBanho findByUniqueAtributs(String nome, String descricao, Double preco, boolean comHidratacao);
 
 }

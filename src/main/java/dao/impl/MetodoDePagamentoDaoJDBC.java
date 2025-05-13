@@ -139,7 +139,7 @@ public class MetodoDePagamentoDaoJDBC implements MetodoDePagamentoDao {
     }
 
     @Override
-    public MetodoDePagamento findByTipo(TipoDePagamento tipoDePagamento) {
+    public MetodoDePagamento findByTipo(TipoDePagamento tipoDePagamento) throws DbExceptions{
 
         PreparedStatement st = null;
         ResultSet rs = null;

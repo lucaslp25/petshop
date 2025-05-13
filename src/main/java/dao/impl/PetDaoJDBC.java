@@ -40,7 +40,7 @@ public class PetDaoJDBC implements PetDao {
             st.setString(2, pet.getEspecie().name());  //pegando o nome da constante dos enums
             st.setString(3, pet.getRaca());
             st.setString(4,pet.getPorte().name()); //pegando o nome da constante dos enums
-            st.setInt(5, pet.getDono().GetId());
+            st.setInt(5, pet.getDono().getId());
             st.setInt(6, pet.getIdade());
 
             //tipo de especie e porte são enums, então tenho que lidar com ele de jeito diferentes!
@@ -74,7 +74,7 @@ public class PetDaoJDBC implements PetDao {
             st.setString(2, pet.getEspecie().name());
             st.setString(3, pet.getRaca());
             st.setString(4, pet.getPorte().name());
-            st.setInt(5, pet.getDono().GetId());
+            st.setInt(5, pet.getDono().getId());
             st.setInt(6, pet.getIdade());
             st.setInt(7, pet.getId());
 
@@ -166,14 +166,14 @@ public class PetDaoJDBC implements PetDao {
 
             while(rs.next()){
 
-                Integer enderecoId = rs.getInt("endereco.id");
+                Integer enderecoId = rs.getInt("endereco_id");
                 Endereco endereco = enderecoMap.get(enderecoId);
 
                 if(endereco == null){
                     endereco = instantiateEndereco(rs);
                     enderecoMap.put(enderecoId, endereco);
                 }
-                Integer clienteId = rs.getInt("cliente.id");
+                Integer clienteId = rs.getInt("cliente_id");
                 Cliente cliente = clienteMap.get(clienteId);
                 if (cliente == null) {
                     cliente = instantiateCliente(rs, endereco);
@@ -215,14 +215,14 @@ public class PetDaoJDBC implements PetDao {
 
             while(rs.next()){
 
-                Integer enderecoId = rs.getInt("endereco.id");
+                Integer enderecoId = rs.getInt("endereco_id");
                 Endereco endereco = enderecoMap.get(enderecoId);
 
                 if(endereco == null){
                     endereco = instantiateEndereco(rs);
                     enderecoMap.put(enderecoId, endereco);
                 }
-                Integer clienteId = rs.getInt("cliente.id");
+                Integer clienteId = rs.getInt("cliente_id");
                 Cliente cliente = clienteMap.get(clienteId);
                 if (cliente == null) {
                     cliente = instantiateCliente(rs, endereco);
@@ -276,6 +276,58 @@ public class PetDaoJDBC implements PetDao {
         }
     }
 
+    @Override
+    public List<Pet> findByCpfDono(String cpf) {
+
+
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try{
+            String sql = "SELECT pet.id AS pet_id, pet.nome AS pet_nome, pet.especie, pet.raca, pet.porte, pet.idade, "
+                    +"cliente.id AS cliente_id, cliente.nome AS cliente_nome, cliente.cpf, cliente.email, cliente.telefone, "
+                    + "endereco.id AS endereco_id, endereco.rua, endereco.numero,"
+                    + "endereco.bairro, endereco.cidade, endereco.estado, endereco.cep, endereco.complemento "
+                    + "FROM pet "
+                    + "INNER JOIN cliente ON pet.cliente_id = cliente.id "
+                    + "INNER JOIN endereco ON cliente.endereco_id = endereco.id "
+                    + "WHERE cliente.cpf = ? ";
+
+
+            st = conn.prepareStatement(sql);
+            st.setString(1, cpf);
+            rs = st.executeQuery();
+
+            List<Pet> pets = new ArrayList<>();
+            Map<Integer, Cliente> clienteMap = new HashMap<>();
+            Map<Integer, Endereco> enderecoMap = new HashMap<>();
+
+            while(rs.next()){
+
+                Integer enderecoId = rs.getInt("endereco_id");
+                Endereco endereco = enderecoMap.get(enderecoId);
+
+                if(endereco == null){
+                    endereco = instantiateEndereco(rs);
+                    enderecoMap.put(enderecoId, endereco);
+                }
+                Integer clienteId = rs.getInt("cliente_id");
+                Cliente cliente = clienteMap.get(clienteId);
+                if (cliente == null) {
+                    cliente = instantiateCliente(rs, endereco);
+                    clienteMap.put(clienteId, cliente);
+                }
+                Pet pet = instantiatePet(rs, cliente);
+                pets.add(pet);
+            }
+            return pets;
+
+        }catch (SQLException e){
+            throw new DbExceptions("Falha ao buscar pets: " + e.getMessage());
+        }finally {
+            DB.closeResultSet(rs);
+            DB.closeStatement(st);
+        }
+    }
 
     private Cliente instantiateCliente(ResultSet rs, Endereco endereco) throws SQLException{
         //Propagando as exceções pois já estou tratando nos outros metodos

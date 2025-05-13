@@ -153,6 +153,43 @@ public class ServicoVacinacaoDaoJDBC implements ServicoVacinacaoDao {
         }
     }
 
+    @Override
+    public ServicoVacinacao findByUniqueAtributs(String nome, String descricao, TiposDeVacinacao tiposDeVacinacao) {
+
+
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT  s.id AS servico_id, " +
+                    "s.nome AS servico_nome, " +
+                    "s.descricao AS servico_descricao, " +
+                    "s.preco AS servico_preco, " +
+                    "s.duracao AS servico_duracao, " +
+                    "sv.tipo_de_vacinacao " +
+                    "FROM servico s " +
+                    "INNER JOIN servico_vacinacao sv ON s.id = sv.servico_id " +
+                    "WHERE nome = ? AND descricao = ? AND tipo_de_vacinacao = ? ";
+
+            st = conn.prepareStatement(sql);
+            st.setString(1, nome);
+            st.setString(2, descricao);
+            st.setString(3, tiposDeVacinacao.name());
+
+            rs = st.executeQuery();
+            if(rs.next()){
+                ServicoVacinacao servicoVacinacao = instantiateServicoVacinacao(rs);
+                return servicoVacinacao;
+            }
+            return null;
+        }catch (SQLException e){
+            throw new DbExceptions("Erro ao buscar serviço de vacinação: " + e.getMessage());
+        }finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+    }
+
     private ServicoVacinacao instantiateServicoVacinacao(ResultSet rs) throws SQLException {
         Integer id = rs.getInt("servico_id");
         String nome = rs.getString("servico_nome");
@@ -160,6 +197,7 @@ public class ServicoVacinacaoDaoJDBC implements ServicoVacinacaoDao {
         Double preco = rs.getDouble("servico_preco");
         Duration duracao = Duration.ofMinutes(rs.getLong("servico_duracao"));
         TiposDeVacinacao tiposDeVacinacao = TiposDeVacinacao.valueOf(rs.getString("tipo_de_vacinacao"));
+
         //essa coluna como pertence a essa mesma classe, pertence com o mesmo nome que foi dada na hora de criar o banco de dados, diferente das outras, que foi atribuido um nome diferente por ser da superClasse!!
 
         ServicoVacinacao servicoVacinacao = new ServicoVacinacao(nome, descricao, preco, duracao, tiposDeVacinacao);

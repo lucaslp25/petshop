@@ -71,7 +71,7 @@ public class Pet {
 
     @Override
     public String toString() {
-        return "\n"+ "Nome: "+nome + "Idade: "+idade+" | Espécie: " + especie + " | Raça: " + raca +  "\nResponsável: " + dono.getNome();
+        return "\n"+ "Nome: "+nome + " | Idade: "+idade+" | Espécie: " + especie + " | Raça: " + raca +  "\nResponsável: " + dono.getNome();
     }
 
 }

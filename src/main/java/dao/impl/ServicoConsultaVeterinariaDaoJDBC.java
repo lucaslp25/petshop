@@ -159,6 +159,44 @@ public class ServicoConsultaVeterinariaDaoJDBC implements ServicoConsultaVeterin
         }
     }
 
+    @Override
+    public ServicoConsultaVeterinaria findByUniqueAtributs(String nome, String descricao, String preco, TiposDeConsultaVeterinaria tiposDeConsultaVeterinaria) {
+
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try{
+            String sql = "SELECT  s.id AS servico_id, " +
+                    "s.nome AS servico_nome, " +
+                    "s.descricao AS servico_descricao, " +
+                    "s.preco AS servico_preco, " +
+                    "s.duracao AS servico_duracao, " +
+                    "sc.tipo_de_consulta "+
+                    "FROM servico s " +
+                    "INNER JOIN servico_consulta_veterinaria sc ON s.id = sc.servico_id " +
+                    "WHERE nome = ? AND descricao = ? AND preco = ? AND tipo_de_consulta = ?";
+
+            st = conn.prepareStatement(sql);
+
+            st.setString(1, nome);
+            st.setString(2, descricao);
+            st.setString(3, preco);
+            st.setString(4, tiposDeConsultaVeterinaria.name());
+            rs = st.executeQuery();
+            if (rs.next()){
+
+                ServicoConsultaVeterinaria servicoConsultaVeterinaria = instantiateServicoConsultaVeterinaria(rs);
+                return servicoConsultaVeterinaria;
+            }
+            return null;
+        }catch (SQLException e){
+            throw new DbExceptions("Erro ao buscar serviço de consulta veterinaria: " + e.getMessage());
+        }finally{
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+    }
+
     private ServicoConsultaVeterinaria instantiateServicoConsultaVeterinaria(ResultSet rs) throws SQLException {
         Integer id = rs.getInt("servico_id");
         String nome = rs.getString("servico_nome");
@@ -172,5 +210,4 @@ public class ServicoConsultaVeterinariaDaoJDBC implements ServicoConsultaVeterin
         servicoConsultaVeterinaria.setId(id);
         return servicoConsultaVeterinaria;
     }
-
 }

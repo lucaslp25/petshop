@@ -1,6 +1,7 @@
 package dao;
 
 import entities.ServicoVacinacao;
+import enums.TiposDeVacinacao;
 
 import java.util.List;
 
@@ -11,5 +12,7 @@ public interface ServicoVacinacaoDao {
     void deleteById(Integer id);
     ServicoVacinacao findById(Integer id);
     List<ServicoVacinacao> findAll();
+    ServicoVacinacao findByUniqueAtributs(String nome, String descricao, TiposDeVacinacao tiposDeVacinacao);
+
 
 }

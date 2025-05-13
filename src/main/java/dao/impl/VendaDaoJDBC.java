@@ -51,7 +51,7 @@ public class VendaDaoJDBC implements VendaDao {
             java.sql.Date sqlDate = java.sql.Date.valueOf(venda.getDataVenda()); //chamada da data
             st.setDate(1, sqlDate);
             st.setDouble(2, venda.getValorTotal());
-            st.setInt(3, venda.getCliente().GetId());
+            st.setInt(3, venda.getCliente().getId());
             st.setInt(4, venda.getMetodoPagamentoId());
 
             int rows = st.executeUpdate();
@@ -83,7 +83,7 @@ public class VendaDaoJDBC implements VendaDao {
             java.sql.Date sqlDate = java.sql.Date.valueOf(venda.getDataVenda());
             st.setDate(1, sqlDate);
             st.setDouble(2, venda.getValorTotal());
-            st.setInt(3, venda.getCliente().GetId());
+            st.setInt(3, venda.getCliente().getId());
             st.setInt(4, venda.getMetodoPagamentoId());
 
             st.executeUpdate();
@@ -238,6 +238,62 @@ public class VendaDaoJDBC implements VendaDao {
 
         }catch (SQLException e){
             throw new DbExceptions("Erro ao buscar vendas: " + e.getMessage());
+        }finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+    }
+
+    @Override
+    public Venda findByUniqueAtributs(LocalDate dataVenda, Double valorTotal, Cliente cliente, Integer metodoPagamentoId) {
+
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try{
+
+            String sql ="SELECT v.id AS venda_id, " +
+                    "v.data_venda, " +
+                    "v.valor_total, " +
+                    "c.id AS cliente_id, " +
+                    "c.nome AS cliente_nome, " +
+                    "c.cpf AS cliente_cpf, " +
+                    "c.email AS cliente_email, " +
+                    "c.telefone AS cliente_telefone, " +
+                    "e.id AS endereco_id, " +
+                    "e.rua AS endereco_rua, " +
+                    "e.numero AS endereco_numero, " +
+                    "e.bairro AS endereco_bairro, " +
+                    "e.cidade AS endereco_cidade, " +
+                    "e.estado AS endereco_estado, " +
+                    "e.cep AS endereco_cep, " +
+                    "e.complemento AS endereco_complemento, " +
+                    "mp.id AS metodo_pagamento_id, " +
+                    "mp.tipo AS metodo_pagamento_tipo " +
+                    "FROM venda v " +
+                    "INNER JOIN cliente c ON v.cliente_id = c.id " +
+                    "INNER JOIN endereco e ON c.endereco_id = e.id " +
+                    "INNER JOIN metodo_pagamento mp ON v.metodo_pagamento_id = mp.id "
+                    +"WHERE data_venda = ? AND valor_total = ? AND cliente_id = ? AND metodo_pagamento_id = ? ";
+
+            st = conn.prepareStatement(sql);
+            st.setString(1, dataVenda.toString());
+            st.setDouble(2, valorTotal);
+            st.setInt(3, cliente.getId());
+            st.setInt(4, metodoPagamentoId);
+
+            rs = st.executeQuery();
+
+            if(rs.next()){
+
+                Endereco endereco = instantiateEndereco(rs);
+                Cliente cliente2 = instantiateCliente(rs, endereco);
+                MetodoDePagamento metodoDePagamento = instantiateMetodoDePagamento(rs);
+                Venda venda = instantiateVenda(rs, cliente2);
+                return venda;
+            }
+            return null;
+        }catch (SQLException e){
+            throw new DbExceptions("Erro ao achar venda: " + e.getMessage());
         }finally {
             DB.closeStatement(st);
             DB.closeResultSet(rs);

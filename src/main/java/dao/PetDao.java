@@ -14,4 +14,6 @@ public interface PetDao {
     Pet findByUniqueAtributs(String nome, String raca, Integer idade);
     //aqui irei usar apenas os atributos basicos para achar o pet, e colocar uma restrição no banco de dados pra não ter colunas repetidas com esses mesmos dados, caso aconteça, de coincidentemente ter, apenas coloque o nome com um um caracterer diferente.... Assim fica mais facil a implementação do sistema!
 
+    List<Pet> findByCpfDono(String cpf);
+
 }

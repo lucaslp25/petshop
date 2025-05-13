@@ -162,6 +162,46 @@ public class ServicoTosaDaoJDBC implements ServicoTosaDao {
         }
     }
 
+    @Override
+    public ServicoTosa findByUniqueAtributs(String nome, String descricao, Double preco, boolean incluiEscovacao, boolean incluiBanhoPrevio) {
+
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try{
+            String sql = "SELECT  s.id AS servico_id, " +
+                    "s.nome AS servico_nome, " +
+                    "s.descricao AS servico_descricao, " +
+                    "s.preco AS servico_preco, " +
+                    "s.duracao AS servico_duracao, " +
+                    "st.inclui_escovacao, " +
+                    "st.inclui_banho_previo "+
+                    "FROM servico s " +
+                    "INNER JOIN servico_tosa st ON s.id = st.servico_id " +
+                    "WHERE nome = ? AND descricao = ? AND preco = ? AND inclui_escovacao = ? AND inclui_banho_previo = ? ";
+
+            st = conn.prepareStatement(sql);
+
+            st.setString(1, nome);
+            st.setString(2, descricao);
+            st.setDouble(3, preco);
+            st.setBoolean(4, incluiEscovacao);
+            st.setBoolean(5, incluiBanhoPrevio);
+
+            rs = st.executeQuery();
+            if (rs.next()){
+                ServicoTosa servicoTosa = instantiateServicoTosa(rs);
+                return servicoTosa;
+            }
+            return null;
+        }catch (SQLException e){
+            throw new DbExceptions("Erro ao buscar Serviço: " + e.getMessage());
+        }finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+    }
+
     private ServicoTosa instantiateServicoTosa(ResultSet rs) throws SQLException {
         Integer id = rs.getInt("servico_id");
         String nome = rs.getString("servico_nome");

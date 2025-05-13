@@ -1,7 +1,7 @@
 package application;
 
 public class Main{
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         //primeira coisa para criar um cliente precisa de um endereço! Para ter a referencia no DB
 
@@ -15,6 +15,9 @@ public class Main{
         //fazer um commit e partir explorar jUnit para testes unitarios!
 
         //nova fase do projeto, toda estrutura adaptada ao maven e jUnits para fazer alguns testes no banco de dados isoladamente!
+
+        Menu menu = new Menu();
+        menu.menu();
 
     }
 }

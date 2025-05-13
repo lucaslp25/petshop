@@ -163,6 +163,43 @@ public class ServicoBanhoDaoJDBC implements ServicoBanhoDao {
         }
     }
 
+    @Override
+    public ServicoBanho findByUniqueAtributs(String nome, String descricao, Double preco, boolean comHidratacao) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try{
+            String sql = "SELECT  s.id AS servico_id, " +
+                    "s.nome AS servico_nome, " +
+                    "s.descricao AS servico_descricao, " +
+                    "s.preco AS servico_preco, " +
+                    "s.duracao AS servico_duracao, " +
+                    "sb.com_hidratacao " +
+                    "FROM servico s " +
+                    "INNER JOIN servico_banho sb ON s.id = sb.servico_id " +
+                    "WHERE nome = ? AND descricao = ? AND preco = ? AND com_hidratacao = ? ";
+
+
+            st = conn.prepareStatement(sql);
+
+            st.setString(1, nome);
+            st.setString(2, descricao);
+            st.setDouble(3, preco);
+            st.setBoolean(4, comHidratacao);
+            rs = st.executeQuery();
+
+            if(rs.next()){
+                ServicoBanho servico = instantiateServicoBanho(rs);
+                return servico;
+            }
+            return null;
+        }catch (SQLException e){
+            throw new DbExceptions("Erro ao buscar serviço de banho: " + e.getMessage());
+        }finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+    }
+
     private ServicoBanho instantiateServicoBanho(ResultSet rs) throws SQLException {
         Integer id = rs.getInt("servico_id");
         String nome = rs.getString("servico_nome");

@@ -48,16 +48,16 @@ public class MetodoDePagamentoDaoJDBCTest {
 
     @BeforeEach
     void setUp() throws SQLException {
-        // 1. Obter uma conexão com o banco de dados
+
         connection = getConnection();
 
-        // 2. Criar uma instância do seu DAO
+
         metodoDePagamentoDao = new MetodoDePagamentoDaoJDBC(connection);
 
-        // 3. Limpar a tabela (opcional, mas recomendado para testes isolados)
+
         clearMetodoDePagamentoTable();
 
-        // 4. Inserir os dados de teste necessários para os seus testes
+
         insertTestData();
     }
 

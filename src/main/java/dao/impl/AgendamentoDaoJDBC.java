@@ -9,6 +9,7 @@ import entities.Agendamento;
 
 import entities.*;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,7 @@ public class AgendamentoDaoJDBC implements AgendamentoDao {
         try(PreparedStatement st = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)){
 
             java.sql.Date sqlDate = java.sql.Date.valueOf(agendamento.getDataAgendamento());
+
             st.setDate(1, sqlDate);
             st.setInt(2, agendamento.getPet().getId());
             st.setInt(3, agendamento.getFuncionarioResponsavel().getId());
@@ -239,6 +241,69 @@ public class AgendamentoDaoJDBC implements AgendamentoDao {
         }catch (SQLException e){
             throw new DbExceptions("Erro ao buscar agendamentos: " + e.getMessage());
         }finally {
+            DB.closeResultSet(rs);
+            DB.closeStatement(st);
+        }
+    }
+
+    @Override
+    public Agendamento findByUniqueAtributs(LocalDate dataAgendamento, Double valor, Servicos servicos, Funcionario funcionarioResponsavel) {
+
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try{
+
+            String sql = "SELECT " +
+                    "a.id AS agendamento_id, " +
+                    "a.data_hora AS data_hora_agendamento, " +
+                    "a.valor AS agendamento_valor, " +
+                    "f.id AS funcionario_id, " +
+                    "f.nome AS funcionario_nome, " +
+                    "pet.id AS pet_id, " +
+                    "pet.nome AS pet_nome, " +
+                    "s.id AS servico_id, " +
+                    "s.nome AS servico_nome, " +
+                    "s.preco AS servico_preco, " +
+                    "s.tipo_servico AS tipo_servico, " +
+                    "c.id AS cliente_id, " +
+                    "c.nome AS cliente_nome " +
+                    "FROM " +
+                    "agendamento a " +
+                    "INNER JOIN " +
+                    "funcionario f ON a.funcionario_id = f.id " +
+                    "INNER JOIN " +
+                    "pet ON a.pet_id = pet.id " +
+                    "INNER JOIN " +
+                    "servico s ON a.servico_id = s.id " +
+                    "INNER JOIN " +
+                    "cliente c ON pet.cliente_id = c.id "
+                    + "WHERE data_hora = ? AND valor = ? AND servico_id = ? AND funcionario_id = ? ";
+
+            st = conn.prepareStatement(sql);
+
+            java.sql.Date sqlDate = java.sql.Date.valueOf(dataAgendamento);
+
+            st.setDate(1, sqlDate);
+            st.setDouble(2, valor);
+            st.setInt(3, servicos.getId());
+            st.setInt(4, funcionarioResponsavel.getId());
+
+            rs = st.executeQuery();
+
+            if(rs.next()){
+
+                Funcionario funcionario = instantiateFuncionario(rs);
+                Cliente cliente = instantiateCliente(rs);
+                Pet pet = instantiatePet(rs, cliente);
+                Servicos servico = instantiateServico(rs);
+                Agendamento agendamento = instantiateAgendamento(rs, funcionario, pet, servico);
+                return agendamento;
+            }
+            return null;
+        }catch (SQLException e){
+            throw new DbExceptions("Erro ao buscar agendamento: " + e.getMessage());
+        } finally {
             DB.closeResultSet(rs);
             DB.closeStatement(st);
         }

@@ -66,7 +66,7 @@ public class ClienteDaoJDBC implements ClienteDao {
             st.setString(3, cliente.getEmail());
             st.setString(4, cliente.getTelefone());
             st.setInt(5, cliente.getEndereco().getId());
-            st.setInt(6, cliente.GetId());
+            st.setInt(6, cliente.getId());
 
             st.executeUpdate();
 
@@ -258,9 +258,9 @@ public class ClienteDaoJDBC implements ClienteDao {
                 Endereco endereco = instantiateEndereco(rs);
                 Cliente cliente = instantiateCliente(rs, endereco);
                 return cliente;
-            }else{
-                throw new DbExceptions("Nenhum cliente com esse CPF encontrado!");
             }
+            return null;
+
         }catch (SQLException e){
              throw new DbExceptions("Erro ao Buscar cliente: " + e.getMessage());
         }finally {

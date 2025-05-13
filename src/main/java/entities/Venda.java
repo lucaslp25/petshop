@@ -13,7 +13,7 @@ public class Venda {
     private Integer metodoPagamentoId;
     private TipoDePagamento tipoPagamento;
 
-  //  private MetodoDePagamento meioDepagamento; mudança de lógica...
+    private MetodoDePagamento meioDePagamento;
     private List<ItemVenda> itensVendidos;
 
     public Venda() {
@@ -61,6 +61,12 @@ public class Venda {
     }
     public void setTipoPagamento(TipoDePagamento tipoPagamento) {
         this.tipoPagamento = tipoPagamento;
+    }
+    public void setMeioDePagamento(MetodoDePagamento meioDePagamento) {
+        this.meioDePagamento = meioDePagamento;
+    }
+    public MetodoDePagamento getMeioDePagamento() {
+        return meioDePagamento;
     }
 
     @Override

@@ -231,6 +231,62 @@ public class ItemVendaDaoJDBC implements ItemVendaDao {
         }
     }
 
+    @Override
+    public ItemVenda findByUniqueAtributs(Double precoUnitario, Integer quantidade, Venda venda) {
+
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try{
+
+            String sql = "SELECT " +
+                    "iv.id AS item_id, " +
+                    "iv.quantidade, " +
+                    "iv.preco_unitario, " +
+                    "v.id AS venda_id, " +
+                    "v.data_venda AS data_venda, " +
+                    "p.id AS produto_id, " +
+                    "p.nome AS produto_nome, " +
+                    "p.preco_venda AS produto_preco, " +
+                    "s.id AS servico_id, " +
+                    "s.nome AS servico_nome, " +
+                    "s.preco AS servico_preco, " +
+                    "s.tipo_servico, " +
+                    "c.id AS cliente_id, " +
+                    "c.nome AS cliente_nome, " +
+                    "c.cpf AS cliente_cpf " +
+                    "FROM item_venda iv " +
+                    "LEFT JOIN produto p ON iv.produto_id = p.id " +
+                    "LEFT JOIN servico s ON iv.servico_id = s.id " +
+                    "INNER JOIN venda v ON iv.venda_id = v.id " +
+                    "INNER JOIN cliente c ON v.cliente_id = c.id "+
+                    "WHERE preco_unitario = ? AND quantidade = ? AND venda_id = ?";
+
+            st = conn.prepareStatement(sql);
+
+            st.setDouble(1, precoUnitario);
+            st.setInt(2, quantidade);
+            st.setInt(3, venda.getId());
+
+            rs = st.executeQuery();
+
+            if(rs.next()){
+
+                Cliente cliente = instantiateCliente(rs);
+                Venda venda2 = instantiateVenda(rs, cliente);
+                Produto produto = instantiateProduto(rs);
+                Servicos servico = instantiateServico(rs);
+                ItemVenda itemVenda = instantiateItemVenda(rs, venda2, produto, servico);
+                return itemVenda;
+            }
+            return null;
+        }catch (SQLException e){
+            throw new DbExceptions("Erro ao selecionar item de venda! " + e.getMessage());
+        }finally{
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+    }
 
 
     private Cliente instantiateCliente(ResultSet rs) throws SQLException {
