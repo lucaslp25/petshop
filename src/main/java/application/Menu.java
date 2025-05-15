@@ -23,6 +23,8 @@ import java.util.Scanner;
 public class Menu {
 
     Scanner sc = new Scanner(System.in);
+    MenuProduto menuProduto = new MenuProduto();
+    MenuServicos menuServicos = new MenuServicos();
 
     public void menu() throws Exception {
 
@@ -32,8 +34,8 @@ public class Menu {
             System.out.println("[1] - Clientes");
             System.out.println("[2] - Pets");
             System.out.println("[3] - Funcionarios");
-            System.out.println("[4] - Agendamento de Serviços");
-            System.out.println("[5] - Comprar Produtos");
+            System.out.println("[4] - Produtos");
+            System.out.println("[5] - Serviços PetShop");
             System.out.println("[6] - Gerar relatórios");
             System.out.println("[0] - Sair\n");
 
@@ -52,10 +54,10 @@ public class Menu {
                         menuFuncionario();
                         break;
                     case 4:
-
+                        menuProduto.menuProduto();
                         break;
                     case 5:
-
+                        menuServicos.menuServicos();
                         break;
                     case 0:
                         System.out.println("Saindo....");
@@ -377,16 +379,20 @@ public class Menu {
         }
     }
 
-    public void listarPets(){
+    public void listarPets()throws ExceptionEntitieNotFound{
 
-        PetServiceImpl petService = new PetServiceImpl();
+        try {
+            PetServiceImpl petService = new PetServiceImpl();
 
-        List<Pet> pets = petService.listarPet();
+            List<Pet> pets = petService.listarPet();
 
-        System.out.println("NOSSOS PETS CADASTRADOS: \n");
-        for (Pet pet : pets) {
-            System.out.println(pet);
-            System.out.println();
+            System.out.println("NOSSOS PETS CADASTRADOS: \n");
+            for (Pet pet : pets) {
+                System.out.println(pet);
+                System.out.println();
+            }
+        }catch (ExceptionEntitieNotFound e ){
+            System.out.println("Erro ao buscar lista de pet: " + e.getMessage());
         }
     }
 

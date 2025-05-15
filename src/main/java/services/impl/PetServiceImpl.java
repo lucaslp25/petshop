@@ -47,8 +47,14 @@ public class PetServiceImpl implements PetService {
             throw new ExceptionEntitieNotFound("Nenhum pet com esses parametros encontrado!");
         }
 
+        if (pet.getDono() == null) {
+            throw new ExceptionEntitieNotFound("Pet sem dono!");
+        }
+
+        if (pet.getDono().getCpf() == null) {
+            throw new ExceptionEntitieNotFound("CPF inválido!");
+        }
+
         return pet;
     }
-
-
 }

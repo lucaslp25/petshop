@@ -14,7 +14,6 @@ import java.util.Map;
 
 public class ClienteDaoJDBC implements ClienteDao {
 
-
     private Connection conn;
 
     //FORÇANDO A INJEÇÃO DE DEPENDENCIA AQUI DENTRO PELO CONSTRUTOR
@@ -168,7 +167,6 @@ public class ClienteDaoJDBC implements ClienteDao {
 
         PreparedStatement st = null;
         ResultSet rs = null;
-
         try{
             String sql = "SELECT cliente.*, endereco.* " +
                     "FROM cliente INNER JOIN endereco " +

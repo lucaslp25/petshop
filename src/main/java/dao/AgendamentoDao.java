@@ -2,6 +2,7 @@ package dao;
 
 import entities.Agendamento;
 import entities.Funcionario;
+import entities.Pet;
 import entities.Servicos;
 
 import java.time.LocalDate;
@@ -15,5 +16,6 @@ public interface AgendamentoDao {
     Agendamento findById(Integer id);
     List<Agendamento> findAll();
     Agendamento findByUniqueAtributs(LocalDate dataAgendamento, Double valor, Servicos servicos, Funcionario funcionarioResponsavel);
+    List<Agendamento> findBypet(Pet pet);
 
 }

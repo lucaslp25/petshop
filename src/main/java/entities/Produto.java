@@ -84,7 +84,7 @@ public class Produto {
         sb.append("Quantidade Estoque: " + quantidadeEstoque + "\n");
         sb.append("Fornecedor: " + fornecedor + "\n");
         if (categoria != null) {
-            sb.append("Categoria: " + categoria.toString() + "\n");
+            sb.append("Categoria: " + categoria.toString());
         }
 
         return sb.toString();

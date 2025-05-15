@@ -160,7 +160,7 @@ public class ServicoConsultaVeterinariaDaoJDBC implements ServicoConsultaVeterin
     }
 
     @Override
-    public ServicoConsultaVeterinaria findByUniqueAtributs(String nome, String descricao, String preco, TiposDeConsultaVeterinaria tiposDeConsultaVeterinaria) {
+    public ServicoConsultaVeterinaria findByUniqueAtributs(String nome, String descricao, Double preco, TiposDeConsultaVeterinaria tiposDeConsultaVeterinaria) {
 
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -180,7 +180,7 @@ public class ServicoConsultaVeterinariaDaoJDBC implements ServicoConsultaVeterin
 
             st.setString(1, nome);
             st.setString(2, descricao);
-            st.setString(3, preco);
+            st.setDouble(3, preco);
             st.setString(4, tiposDeConsultaVeterinaria.name());
             rs = st.executeQuery();
             if (rs.next()){

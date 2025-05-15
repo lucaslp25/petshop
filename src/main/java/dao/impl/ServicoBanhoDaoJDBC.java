@@ -201,6 +201,17 @@ public class ServicoBanhoDaoJDBC implements ServicoBanhoDao {
     }
 
     private ServicoBanho instantiateServicoBanho(ResultSet rs) throws SQLException {
+
+        ServicoBanho servicoBanho = new ServicoBanho();
+
+        servicoBanho.setId(rs.getInt("servico_id"));
+        servicoBanho.setNome(rs.getString("servico_nome"));
+        servicoBanho.setDescricao(rs.getString("servico_descricao"));
+        servicoBanho.setPreco(rs.getDouble("servico_preco"));
+        servicoBanho.setDuracao(Duration.ofMinutes(rs.getLong(("servico_duracao"))));
+        servicoBanho.setComHidratacao(rs.getBoolean("com_hidratacao"));
+
+        /*
         Integer id = rs.getInt("servico_id");
         String nome = rs.getString("servico_nome");
         String descricao = rs.getString("servico_descricao");
@@ -210,6 +221,8 @@ public class ServicoBanhoDaoJDBC implements ServicoBanhoDao {
 
         ServicoBanho servicoBanho = new ServicoBanho(nome, descricao, preco, duracao, comHidratacao);
         servicoBanho.setId(id);
+
+         */
         return servicoBanho;
     }
 
