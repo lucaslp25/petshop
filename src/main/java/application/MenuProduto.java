@@ -1,20 +1,28 @@
 package application;
 
+import dao.ClienteDao;
 import dao.DaoFactory;
 import dao.ProdutoDao;
-import entities.Produto;
+import entities.*;
 import enums.CategoriaDeProdutos;
 import exceptions.ExceptionEntitieNotFound;
 import exceptions.ExceptionInsufficientStock;
+import services.ItemVendaService;
+import services.impl.ItemVendaServiceImpl;
+import services.impl.MetodoPagamentoServiceImpl;
 import services.impl.ProdutoServiceImpl;
+import services.impl.VendaServiceImpl;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class MenuProduto {
 
     Scanner sc = new Scanner(System.in);
 
-    ProdutoServiceImpl produtoService = new ProdutoServiceImpl();
+    private ProdutoServiceImpl produtoService = new ProdutoServiceImpl();
+    private VendaServiceImpl vendaService = new VendaServiceImpl();
+    private ItemVendaService itemVendaService = new ItemVendaServiceImpl();
 
     public void menuProduto()throws Exception{
 
@@ -48,7 +56,7 @@ public class MenuProduto {
                         removerProduto();
                         break;
                     case 5:
-                        comprarProdutos();
+                        realizarVenda();
                         break;
                     case 6:
 
@@ -258,10 +266,8 @@ public class MenuProduto {
 
             Produto produto = produtoDao.findById(id);
 
-
             if (produto == null){
                 throw new ExceptionEntitieNotFound("Nenhum produto encontrado COM esse ID!");
-
             }
 
             if (produto != null) {
@@ -332,11 +338,166 @@ public class MenuProduto {
 
             System.out.println("Compra realizada com sucesso! Valor Total R$:" + valorTotal);
 
-
         }catch (ExceptionEntitieNotFound e) {
             System.out.println("Erro ao comprar produto: " + e.getMessage());
         }catch (ExceptionInsufficientStock e) {
             System.out.println("Erro ao comprar produto: " + e.getMessage());
         }
+    }
+
+    public void realizarVenda()throws Exception {
+
+        try {
+            System.out.println("= INICIAR NOVA VENDA =\n");
+            System.out.print("Digite o cpf do cliente para iniciar a Venda: ");
+            String cpf = sc.nextLine();
+
+            ClienteDao clienteDao = DaoFactory.createClienteDao();
+            Cliente cliente = clienteDao.findByCPF(cpf);
+            if (cliente == null) {
+                throw new ExceptionEntitieNotFound("Nenhum cliente com esse cpf em nosso cadastro!");
+            }
+            System.out.println("Vamos iniciar a venda de " + cliente.getNome() + " !");
+
+            List<ItemVenda> itensCarrinho = new ArrayList<>();
+            Double valorTotalVenda = 0.0;
+
+            Map<Integer, Integer> produtosCompradosQuantidades = new HashMap<>();
+
+            while (true) {
+
+                System.out.println("\n= ADICIONAR ITENS À TRANSAÇÃO = ");
+                System.out.println("[1] - Adicionar PRODUTO");
+                System.out.println("[0] - FINALIZAR TRANSAÇÃO");
+                System.out.println("[-1] - CANCELAR TRANSAÇÃO");
+                System.out.print("Escolha uma opção: ");
+                Integer opcaoItem = sc.nextInt();
+                sc.nextLine();
+
+                if (opcaoItem == 0) {
+                    break;
+                }
+                if (opcaoItem == -1) {
+                    System.out.println("Transação cancelada.");
+                    return;
+                }
+                switch (opcaoItem) {
+                    case 1:
+                        //metodo auxiliar para adicionar os produtos
+                        adicionarProdutoAoCarrinho(itensCarrinho, produtosCompradosQuantidades, cliente);
+                        break;
+                    default:
+                        System.out.println("Opção inválida. Tente novamente.");
+                }
+                // Stream para somar todos os itens para faciliar e pegar alguns conceitos, usando o mapToDouble, que faz a mesma função do map em streams, porem comm números double, e o sum que armazena a soma de todos eles!
+
+                valorTotalVenda = itensCarrinho.stream().mapToDouble(item -> item.getPrecoUnitario() * item.getQuantidade()).sum();
+                System.out.println("\nValor total parcial da transação: R$" + String.format("%.2f", valorTotalVenda));
+            }
+            if (itensCarrinho.isEmpty()) {
+                System.out.println("Nenhum item adicionado à transação. Compra não finalizada.");
+                return;
+            }
+            System.out.println("\n= Nossos Métodos de Pagamento Disponíveis =");
+
+            MetodoPagamentoServiceImpl metodoPagamentoService = new MetodoPagamentoServiceImpl();
+
+            List<MetodoDePagamento> metodoDePagamentos = metodoPagamentoService.listarTodos();
+            if (metodoDePagamentos == null) {
+                throw new ExceptionEntitieNotFound("Nenhum método de pagamento cadastrado ainda!");
+            }
+
+            System.out.println("METODOS DE PAGAMENTOS DISPONIVEIS: \n");
+            for (MetodoDePagamento metodoDePagamento : metodoDePagamentos) {
+                System.out.println(metodoDePagamento);
+                System.out.println("ID :" + metodoDePagamento.getId());
+                System.out.println();
+            }
+            System.out.println("Escolha o id do metodo de pagamento que deseja usar: ");
+            Integer id = sc.nextInt();
+            sc.nextLine();
+
+            MetodoDePagamento metodoDePagamento = metodoPagamentoService.buscarPorId(id);
+
+            System.out.println("Você irá pagar com " + metodoDePagamento.getTipoDePagamento());
+
+            Venda venda = new Venda(LocalDate.now(), valorTotalVenda, cliente, metodoDePagamento.getId());
+
+            venda.setTipoPagamento(metodoDePagamento.getTipoDePagamento());
+
+            vendaService.addVenda(venda);
+
+            System.out.println("\nTRANSAÇÃO FINALIZADA COM SUCESSO! ID da Venda: " + venda.getId());
+            System.out.println("Valor Total da Transação: R$" + String.format("%.2f", venda.getValorTotal()));
+
+            for (ItemVenda item : itensCarrinho) {
+                item.setVenda(venda);
+                itemVendaService.addItemVenda2(item);
+            }
+            System.out.println("Itens da venda registrados.");
+
+            for (Map.Entry<Integer, Integer> entry : produtosCompradosQuantidades.entrySet()) {
+                Integer produtoId = entry.getKey();
+                Integer quantidadeComprada = entry.getValue();
+
+                Produto produtoEstoque = produtoService.buscarPorId(produtoId);
+                if (produtoEstoque != null) {
+                    Integer novoEstoque = produtoEstoque.getQuantidadeEstoque() - quantidadeComprada;
+                    produtoEstoque.setQuantidadeEstoque(novoEstoque);
+                    produtoService.alterarProduto(produtoEstoque);
+                }
+            }
+            System.out.println("Estoque dos produtos atualizado.");
+
+        } catch (InputMismatchException e) {
+            sc.nextLine();
+            System.out.println("Apenas números!");
+        } catch (ExceptionEntitieNotFound | ExceptionInsufficientStock | IllegalArgumentException e) {
+            System.out.println("Erro na transação: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Erro inesperado durante a transação: " + e.getMessage());
+        }
+    }
+
+    private void adicionarProdutoAoCarrinho(List<ItemVenda> itensCarrinho, Map<Integer, Integer> produtosCompradosQuantidades, Cliente cliente) throws Exception {
+        List<Produto> produtosDisponiveis = produtoService.listarProduto();
+        if (produtosDisponiveis.isEmpty()) {
+            System.out.println("Nenhum produto disponível para adicionar.");
+            return;
+        }
+
+        System.out.println("\n= NOSSOS PRODUTOS =");
+        for (Produto prod : produtosDisponiveis) {
+            System.out.println("[ID - " + prod.getId() + "] - " + prod.getNome() + " (Estoque: " + prod.getQuantidadeEstoque() + ") - R$" + String.format("%.2f", prod.getPrecoDeVenda()));
+        }
+        System.out.print("Digite o ID do produto para adicionar: ");
+        Integer idProduto = sc.nextInt();
+        sc.nextLine();
+
+        Produto produto = produtoService.buscarPorId(idProduto);
+        if (produto == null) {
+            System.out.println("Nenhum produto com esse ID!");
+            return;
+        }
+
+        System.out.print("Digite a quantidade de '" + produto.getNome() + "' que deseja adicionar: ");
+        Integer quantidade = sc.nextInt();
+        sc.nextLine();
+
+        if (quantidade <= 0) {
+            System.out.println("Quantidade inválida.");
+            return;
+        }
+        if (quantidade > produto.getQuantidadeEstoque()) {
+            throw new ExceptionInsufficientStock("Estoque insuficiente para o produto: " + produto.getNome() + ". Disponível: " + produto.getQuantidadeEstoque());
+        }
+
+        ItemVenda itemProduto = new ItemVenda(produto.getPrecoDeVenda(), quantidade, produto, null, null);
+        itensCarrinho.add(itemProduto);
+
+        produtosCompradosQuantidades.put(produto.getId(),
+                produtosCompradosQuantidades.getOrDefault(produto.getId(), 0) + quantidade);
+
+        System.out.println("Produto '" + produto.getNome() + "' adicionado ao carrinho.");
     }
 }

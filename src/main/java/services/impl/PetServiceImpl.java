@@ -2,6 +2,7 @@ package services.impl;
 
 import dao.DaoFactory;
 import dao.PetDao;
+import entities.Funcionario;
 import entities.Pet;
 import exceptions.ExceptionEntitieNotFound;
 import services.PetService;
@@ -54,7 +55,19 @@ public class PetServiceImpl implements PetService {
         if (pet.getDono().getCpf() == null) {
             throw new ExceptionEntitieNotFound("CPF inválido!");
         }
-
         return pet;
+    }
+
+    @Override
+    public void excluirPetById(Integer id) throws ExceptionEntitieNotFound {
+
+        if (id == null){
+            throw new IllegalArgumentException("Erro! Id nulo!");
+        }
+        Pet pet = petDao.findById(id);
+        if (pet == null){
+            throw new ExceptionEntitieNotFound("Nenhum pet com o ID " + id + " encontrado!");
+        }
+        petDao.deleteById(id);
     }
 }

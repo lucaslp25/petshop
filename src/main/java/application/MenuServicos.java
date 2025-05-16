@@ -127,7 +127,6 @@ public class MenuServicos {
 
     public ServicoBanho servicoBanho() throws Exception {
         try {
-
             System.out.println("Agendamento de Serviço Banho!\n");
 
             System.out.println("Nome do serviço de banho (EX: BANHO RÁPIDO..) ");
@@ -136,6 +135,7 @@ public class MenuServicos {
             String descricao = sc.nextLine();
             System.out.println("Preço do serviço: ");
             Double preco = sc.nextDouble();
+            sc.nextLine();
             System.out.println("Duração do serviço (em minutos): ");
             Integer duracao = null;
             try {

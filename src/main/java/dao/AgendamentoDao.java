@@ -17,5 +17,7 @@ public interface AgendamentoDao {
     List<Agendamento> findAll();
     Agendamento findByUniqueAtributs(LocalDate dataAgendamento, Double valor, Servicos servicos, Funcionario funcionarioResponsavel);
     List<Agendamento> findBypet(Pet pet);
+    List<Agendamento> findByFuncionario(Funcionario funcionarioResponsavel);
+    List<Agendamento> findByClienteCpf(String cpf);
 
 }

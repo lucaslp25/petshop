@@ -23,11 +23,12 @@ public class MetodoPagamentoServiceImpl implements MetodoPagamentoService {
 
     @Override
     public MetodoDePagamento buscarPorId(Integer id) {
+        MetodoDePagamento metodoEncontrado = metodoDePagamentoDao.findById(id);
 
-        if(metodoDePagamentoDao.findById(id) == null){
+        if (metodoEncontrado == null){
             throw new ExceptionEntitieNotFound("Nenhum método de pagamento com o ID "+id +" registrado!");
         }
-        return metodoDePagamentoDao.findById(id);
+        return metodoEncontrado;
     }
 
     @Override

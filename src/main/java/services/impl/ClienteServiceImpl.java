@@ -46,14 +46,40 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Cliente buscarClientePorCpf(String cpf) throws ExceptionEntitieNotFound {
 
-
         cpf = cpf.trim();
 
         if (clienteDao.findByCPF(cpf) == null) {
-            throw new ExceptionEntitieNotFound("Nenhum cliente com esse CPF na lista!");
+            throw new ExceptionEntitieNotFound("Nenhum cliente com esse CPF no sistema!");
         }
 
         return clienteDao.findByCPF(cpf);
     }
 
+    @Override
+    public void deletarClienteByCpf(String cpf) throws ExceptionEntitieNotFound  {
+
+        cpf = cpf.trim();
+
+        if (clienteDao.findByCPF(cpf) == null) {
+            throw new ExceptionEntitieNotFound("Nenhum cliente com esse CPF no sistema!");
+        }
+
+        Cliente cliente = clienteDao.findByCPF(cpf);
+        if (cliente != null){
+            clienteDao.deleteById(cliente.getId());
+        }
+    }
+
+    @Override
+    public void deletarClienteById(Integer id)  throws ExceptionEntitieNotFound {
+        if(id == null){
+            throw new ExceptionEntitieNotFound("Id nulo!");
+        }
+        Cliente cliente = clienteDao.findById(id);
+        if (cliente == null){
+            throw new ExceptionEntitieNotFound("Nenhum cliente com esse id no sistema!");
+        }else {
+            clienteDao.deleteById(id);
+        }
+    }
 }

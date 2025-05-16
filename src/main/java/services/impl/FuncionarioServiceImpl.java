@@ -48,4 +48,16 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
         return funcionario;
     }
+
+    @Override
+    public void excluirFuncionarioById(Integer id)throws ExceptionEntitieNotFound {
+        if (id == null){
+            throw new IllegalArgumentException("Erro! Id nulo!");
+        }
+        Funcionario funcionario = funcionarioDao.findById(id);
+        if (funcionario == null){
+            throw new ExceptionEntitieNotFound("Nenhum funcionario com o ID " + id + " encontrado!");
+        }
+        funcionarioDao.deleteById(id);
+    }
 }

@@ -2,10 +2,12 @@ package dao.impl;
 
 import dao.DB;
 import dao.DbExceptions;
+import dao.DbIntegrityException;
 import dao.FuncionarioDao;
 import entities.Endereco;
 import entities.Funcionario;
 import enums.TiposDeCargoFuncionario;
+import exceptions.ExceptionOfIntegrity;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -81,7 +83,7 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Integer id){
 
         String sql = "DELETE FROM funcionario WHERE id = ?";
 
@@ -96,7 +98,11 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
                 throw new DbExceptions("Nenhum funcionario com esse ID!");
             }
         }catch (SQLException e){
-            throw new DbExceptions(e.getMessage());
+            //erro especifico de integridade do MySQL !
+            if (e.getErrorCode() == 1451) {
+                throw new ExceptionOfIntegrity("Não é possível deletar o funcionário. Existem dados associados a ele (agendamentos, endereços, etc.).");
+            }
+            throw new DbExceptions("Erro ao deletar funcionário: " + e.getMessage());
         }
     }
 

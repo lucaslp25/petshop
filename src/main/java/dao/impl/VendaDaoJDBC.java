@@ -300,6 +300,84 @@ public class VendaDaoJDBC implements VendaDao {
         }
     }
 
+    @Override
+    public List<Venda> findVendasByClienteCpf(String cpf) {
+
+
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try{
+            String sql ="SELECT v.id AS venda_id, " +
+                    "v.data_venda, " +
+                    "v.valor_total, " +
+                    "c.id AS cliente_id, " +
+                    "c.nome AS cliente_nome, " +
+                    "c.cpf AS cliente_cpf, " +
+                    "c.email AS cliente_email, " +
+                    "c.telefone AS cliente_telefone, " +
+                    "e.id AS endereco_id, " +
+                    "e.rua AS endereco_rua, " +
+                    "e.numero AS endereco_numero, " +
+                    "e.bairro AS endereco_bairro, " +
+                    "e.cidade AS endereco_cidade, " +
+                    "e.estado AS endereco_estado, " +
+                    "e.cep AS endereco_cep, " +
+                    "e.complemento AS endereco_complemento, " +
+                    "mp.id AS metodo_pagamento_id, " +
+                    "mp.tipo AS metodo_pagamento_tipo " +
+                    "FROM venda v " +
+                    "INNER JOIN cliente c ON v.cliente_id = c.id " +
+                    "INNER JOIN endereco e ON c.endereco_id = e.id " +
+                    "INNER JOIN metodo_pagamento mp ON v.metodo_pagamento_id = mp.id "+
+                    "WHERE c.cpf = ?";
+
+            st = conn.prepareStatement(sql);
+            st.setString(1, cpf);
+
+            rs = st.executeQuery();
+
+            Map<Integer, Endereco> enderecoMap = new HashMap<>();
+            Map<Integer, Cliente> clienteMap = new HashMap<>();
+            Map<Integer, MetodoDePagamento> metodoDePagamentoMap = new HashMap<>();
+            List<Venda> vendas = new ArrayList<>();
+
+            while(rs.next()){
+
+                Integer enderecoId = rs.getInt("endereco_id");
+                Endereco endereco = enderecoMap.get(enderecoId);
+
+                if(endereco == null){
+                    endereco = instantiateEndereco(rs);
+                    enderecoMap.put(enderecoId, endereco);
+                }
+
+                Integer clienteId = rs.getInt("cliente_id");
+                Cliente cliente = clienteMap.get(clienteId);
+                if(cliente == null){
+                    cliente = instantiateCliente(rs, endereco);
+                    clienteMap.put(clienteId, cliente);
+                }
+
+                Integer metodoDePagamentoId = rs.getInt("metodo_pagamento_id");
+                MetodoDePagamento metodoDePagamento = metodoDePagamentoMap.get(metodoDePagamentoId);
+                if(metodoDePagamento == null){
+                    metodoDePagamento = instantiateMetodoDePagamento(rs);
+                    metodoDePagamentoMap.put(metodoDePagamentoId, metodoDePagamento);
+                }
+                Venda venda = instantiateVenda(rs, cliente);
+                vendas.add(venda);
+            }
+            return vendas;
+
+        }catch (SQLException e){
+            throw new DbExceptions("Erro ao buscar vendas: " + e.getMessage());
+        }finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+    }
+
     private Venda instantiateVenda(ResultSet rs, Cliente cliente) throws SQLException {
         Venda venda = new Venda();
 

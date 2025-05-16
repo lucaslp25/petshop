@@ -119,7 +119,6 @@ public class PetDaoJDBC implements PetDao {
                     + "INNER JOIN endereco ON cliente.endereco_id = endereco.id "
                     + "WHERE pet.id = ? ";
 
-
             //esse script esta pegando um unico pet do banco de dados pelo id, ao alternar o pet.id por cliente.id eu vou estar pegando todos os pets de um determinado cliente que eu informar o ID! Dai eu teria que fazer o metodo retornar uma lista
 
             st = conn.prepareStatement(sql);
