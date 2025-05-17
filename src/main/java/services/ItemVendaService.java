@@ -15,5 +15,4 @@ public interface ItemVendaService {
     void deleteItemVendaById(Integer id);
     List<ItemVenda> listarItemVendas();
     ItemVenda buscarItemVendaById(Integer id);
-
 }

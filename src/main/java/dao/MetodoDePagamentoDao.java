@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface MetodoDePagamentoDao {
 
-    //padrão CRUD
-
     void insert(MetodoDePagamento metodoDePagamento);
     void update(MetodoDePagamento metodoDePagamento);
     void deleteById(Integer id);

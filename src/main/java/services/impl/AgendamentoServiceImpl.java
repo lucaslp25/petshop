@@ -12,7 +12,6 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
     private AgendamentoDao agendamentoDao = DaoFactory.createAgendamentoDao();
 
-
     @Override
     public void cadastrarAgendamento(Agendamento agendamento)throws ExceptionEntitieNotFound {
 

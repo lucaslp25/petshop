@@ -42,7 +42,7 @@ public class EnderecoDaoJDBC implements EnderecoDao {
                     endereco.setId(id);
                     System.out.println("Endereço inserido com sucesso! ID: " + id);
                 }
-                DB.closeResultSet(rs);//fechamento do result set (declarado fora do escopo do try resources)
+                DB.closeResultSet(rs);
             }else{
                 throw new DbExceptions("Erro inesperado ao inserir o endereço!");
             }
@@ -200,5 +200,4 @@ public class EnderecoDaoJDBC implements EnderecoDao {
         endereco.setComplemento(rs.getString("complemento"));
         return endereco;
     }
-
 }

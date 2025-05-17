@@ -37,9 +37,9 @@ public class ServicoVacinacao extends Servicos {
         return "VACINAÇÃO";
     }
 
+
     @Override
     public String toString() {
         return super.toString() + "Tipo de serviço: Vacinação | Tipo de vacina: " +tipoDeVacinacao.toString();
     }
-
 }

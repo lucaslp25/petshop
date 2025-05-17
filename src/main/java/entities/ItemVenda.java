@@ -76,6 +76,20 @@ public class ItemVenda {
         this.venda = venda;
     }
 
+
+    public String relatorioTostring(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID Item De Venda: " + this.id + "\n");
+        sb.append("Produto: " + produto.getNome());
+        sb.append("\nQuantidade: " + quantidade);
+        sb.append("\nPreço unitário: R$" +  String.format("%.2f",precoUnitario));
+
+        Double totalParcial = quantidade*precoUnitario;
+
+        sb.append("\nTotal Parcial desse produto: R$" + String.format("%.2f",totalParcial));
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

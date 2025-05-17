@@ -23,7 +23,6 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         if(funcionario.getEndereco() == null){
             throw new IllegalArgumentException("Erro! O Funcionario precisa de um endereço!");
         }
-
         funcionarioDao.insertFuncionario(funcionario);
     }
 
@@ -34,7 +33,6 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         if (funcionarios.isEmpty()) {
             throw new ExceptionEntitieNotFound("Nenhum funcionario na lista ainda!");
         }
-
         return funcionarios;
     }
 

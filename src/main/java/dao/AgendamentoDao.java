@@ -19,5 +19,5 @@ public interface AgendamentoDao {
     List<Agendamento> findBypet(Pet pet);
     List<Agendamento> findByFuncionario(Funcionario funcionarioResponsavel);
     List<Agendamento> findByClienteCpf(String cpf);
-
+    List<Agendamento> findByMonthAndYear(Integer month, Integer year);
 }

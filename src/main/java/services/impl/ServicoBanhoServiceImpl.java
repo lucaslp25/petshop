@@ -39,7 +39,6 @@ public class ServicoBanhoServiceImpl implements ServicoBanhoService {
         if (servicoBanho == null) {
             throw new ExceptionEntitieNotFound("Nenhum Serviço com o ID " + id + " foi encontrado!");
         }
-
         servicoBanhoDao.deleteById(id);
     }
 
@@ -65,5 +64,4 @@ public class ServicoBanhoServiceImpl implements ServicoBanhoService {
         }
         return servicoBanhoDao.findById(id);
     }
-
 }

@@ -12,5 +12,4 @@ public interface FuncionarioDao {
     Funcionario findById(Integer id);
     List<Funcionario> findAll();
     Funcionario findByNomeECargo(String nome, String Cargo);
-
 }

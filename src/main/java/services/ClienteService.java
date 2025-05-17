@@ -11,6 +11,4 @@ public interface ClienteService {
      Cliente buscarClientePorCpf(String cpf);
      void deletarClienteByCpf(String cpf);
      void deletarClienteById(Integer id);
-
-
 }

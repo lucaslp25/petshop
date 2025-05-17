@@ -11,5 +11,4 @@ public interface ServicoDao {
     void deleteById(Integer id);
     Servicos findById(Integer id);
     List<Servicos> findAll();
-
 }

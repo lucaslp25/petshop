@@ -29,7 +29,6 @@ public class ClienteServiceImpl implements ClienteService {
         }
 
         clienteDao.insertCliente(cliente);
-
     }
 
     @Override
@@ -38,20 +37,16 @@ public class ClienteServiceImpl implements ClienteService {
         if (clienteDao.findAll() == null){
             throw new IllegalArgumentException("A lista de clientes está vazia!");
         }
-
         return clienteDao.findAll();
-
     }
 
     @Override
     public Cliente buscarClientePorCpf(String cpf) throws ExceptionEntitieNotFound {
-
         cpf = cpf.trim();
 
         if (clienteDao.findByCPF(cpf) == null) {
             throw new ExceptionEntitieNotFound("Nenhum cliente com esse CPF no sistema!");
         }
-
         return clienteDao.findByCPF(cpf);
     }
 

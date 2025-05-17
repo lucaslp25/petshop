@@ -10,7 +10,6 @@ public class DB {
     //objeto de conexão com o banco de dados
     private static Connection conn = null;
 
-
     public static Properties loadProperties(){
         try(FileInputStream fs = new FileInputStream("db.properties")){
             Properties props = new Properties();    //instanciando as propriedades
@@ -48,7 +47,6 @@ public class DB {
             }
         }
     }
-
     public static void closeStatement(Statement st) {
         if (st != null) {
             try{

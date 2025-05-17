@@ -19,6 +19,8 @@ import java.util.Scanner;
 
 public class MenuServicos {
 
+    MenuRelatorios menuRelatorios = new MenuRelatorios();
+
     Scanner sc = new Scanner(System.in);
 
     private ServicoBanhoServiceImpl servicoBanhoService = new ServicoBanhoServiceImpl();
@@ -68,7 +70,7 @@ public class MenuServicos {
                         removerAgendamento();
                         break;
                     case 5:
-
+                        menuRelatorios.relatorioDeAgendamentos();
                         break;
                     case 0:
                         System.err.println("Voltando....");
@@ -172,7 +174,7 @@ public class MenuServicos {
             servicoBanhoService.cadastrarServicoBanho(servicoBanho);
             System.out.println("Serviço banho Agendado com sucesso!");
 
-            return servicoBanho; // AQUI ESTA RETORNANDO SEM O ID, PRECISO RECUPERAR O ID AQUI E O DOS OUTROS SERVIÇOS TAMBE.... COM UMA FORMA DE PEGAR PELOS ATRIBUTOS UNICOS!
+            return servicoBanho;
 
         } catch (ExceptionEntitieNotFound e) {
             System.out.println("Erro ao agendar serviço de banho: " + e.getMessage());
@@ -498,8 +500,6 @@ public class MenuServicos {
             }
             Double valor = servicoBanho.getPreco();
 
-            //pegando o id pelos atribrutos unicos do serviço de banho, metodo que tive que pensar lá atras no programa para aplicar agora!
-
             ServicoBanho servicoBanho1 =  servicoBanhoDao.findByUniqueAtributs(servicoBanho.getNome(), servicoBanho.getDescricao(), servicoBanho.getPreco(), servicoBanho.getComHidratacao());
 
             Agendamento agendamento = new Agendamento(dataFormatada, servicoBanho1, pet, funcionario, valor);
@@ -529,8 +529,8 @@ public class MenuServicos {
 
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate agora = LocalDate.now(); //tratar erros para data não ser agendada para antes de hoje!
-            LocalDate dataLimite = agora.plusDays(90); //não pode ultrapassar 90 dias o agendamento
+            LocalDate agora = LocalDate.now();
+            LocalDate dataLimite = agora.plusDays(90);
 
             System.out.println("= AGENDAMENTO = \n");
             System.out.println("Digite a data do agendamento: (dd/MM/yyyy)");
@@ -604,8 +604,6 @@ public class MenuServicos {
             }
             Double valor = servicoTosa.getPreco();
 
-            //pegando o id pelos atribrutos unicos do serviço de banho, metodo que tive que pensar lá atras no programa para aplicar agora!
-
             ServicoTosa servicoTosa1 = servicoTosaDao.findByUniqueAtributs(servicoTosa.getNome(), servicoTosa.getDescricao(), servicoTosa.getPreco(), servicoTosa.isIncluiEscovacao(), servicoTosa.isIncluiBanhoPrevio());
 
             Agendamento agendamento = new Agendamento(dataFormatada, servicoTosa1, pet, funcionario, valor);
@@ -633,8 +631,8 @@ public class MenuServicos {
 
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate agora = LocalDate.now(); //tratar erros para data não ser agendada para antes de hoje!
-            LocalDate dataLimite = agora.plusDays(90); //não pode ultrapassar 90 dias o agendamento
+            LocalDate agora = LocalDate.now();
+            LocalDate dataLimite = agora.plusDays(90);
 
             System.out.println("= AGENDAMENTO = \n");
             System.out.println("Digite a data do agendamento: (dd/MM/yyyy)");
@@ -708,8 +706,6 @@ public class MenuServicos {
             }
             Double valor = servicoVacinacao.getPreco();
 
-            //pegando o id pelos atribrutos unicos do serviço de banho, metodo que tive que pensar lá atras no programa para aplicar agora!
-
             ServicoVacinacao servicoVacinacao1 = servicoVacinacaoDao.findByUniqueAtributs(servicoVacinacao.getNome(), servicoVacinacao.getDescricao(), servicoVacinacao.getTipoDeVacinacao());
 
             Agendamento agendamento = new Agendamento(dataFormatada, servicoVacinacao1, pet, funcionario, valor);
@@ -737,8 +733,8 @@ public class MenuServicos {
 
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate agora = LocalDate.now(); //tratar erros para data não ser agendada para antes de hoje!
-            LocalDate dataLimite = agora.plusDays(90); //não pode ultrapassar 90 dias o agendamento
+            LocalDate agora = LocalDate.now();
+            LocalDate dataLimite = agora.plusDays(90);
 
             System.out.println("= AGENDAMENTO = \n");
             System.out.println("Digite a data do agendamento: (dd/MM/yyyy)");
@@ -811,8 +807,6 @@ public class MenuServicos {
                 throw new ExceptionEntitieNotFound("Erro! Serviço nulo!");
             }
             Double valor = servicoConsultaVeterinaria.getPreco();
-
-            //pegando o id pelos atribrutos unicos do serviço de banho, metodo que tive que pensar lá atras no programa para aplicar agora!
 
             ServicoConsultaVeterinaria servicoConsultaVeterinaria1 = servicoConsultaVeterinariaDao.findByUniqueAtributs(servicoConsultaVeterinaria.getNome(), servicoConsultaVeterinaria.getDescricao(), servicoConsultaVeterinaria.getPreco(), servicoConsultaVeterinaria.getTipoDeConsulta());
 

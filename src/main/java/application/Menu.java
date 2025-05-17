@@ -53,7 +53,7 @@ public class Menu {
                         menuServicos.menuServicos();
                         break;
                     case 0:
-                        System.out.println("Saindo....");
+                        System.out.println("Volte sempre!");
                         return;
                     default:
                         System.err.println("Opção inválida! ");
@@ -284,7 +284,6 @@ public class Menu {
                 System.out.println("Bem-vindo " + cliente.getNome() + "!\n");
             }
 
-
             System.out.print("Digite o nome do seu pet: ");
             String nome = sc.nextLine();
 
@@ -404,7 +403,6 @@ public class Menu {
     public void buscarPet()throws Exception{
 
         try {
-
             ClienteServiceImpl clienteService = new ClienteServiceImpl();
 
             System.out.print("Digite o CPF do dono: ");
@@ -678,7 +676,8 @@ public class Menu {
                         System.out.println("Todos os agendamentos foram Deletados!.");
 
                         try {
-                            funcionarioService.excluirFuncionarioById(op); // O 'op' é o ID original do funcionário
+                            funcionarioService.excluirFuncionarioById(op);
+
                             System.out.println("Funcionário deletado com sucesso após remoção de agendamentos!");
                         } catch (DbIntegrityException lp) {
                             System.out.println("Ainda não foi possível deletar o funcionário: " + lp.getMessage());
@@ -770,7 +769,6 @@ public class Menu {
             sc.nextLine();
             switch (opGerenciar) {
                 case 1:
-
                     List<Agendamento> agendamentos = agendamentoDao.findBypet(pet);
                     if (agendamentos.isEmpty()) {
                         System.out.println("Nenhum agendamento para esse Pet! Tente deletar o pet novamente!");
@@ -987,7 +985,7 @@ public class Menu {
                             if (ids.isEmpty()){
                                 throw new ExceptionEntitieNotFound("Nenhuma venda encontrada para este cliente!");
                             }else{
-                                c3 = 0; //esta em outra escopo esse contador
+                                c3 = 0; //esta em outro escopo esse contador
                                 for (int i = 0; i < ids.size(); i++) {
                                     try {
                                         itemVendaDao.deleteByVendaId(ids.get(i));
@@ -1007,7 +1005,6 @@ public class Menu {
                                     System.out.println(ids.size() - c3 + "Itens de vendas pendentes a serem excluidos ainda!");
                                 }
                             }
-
                             int c4 = 0;
                             for (Venda vendas: vendasCliente){
                                 try{
@@ -1061,5 +1058,5 @@ public class Menu {
             System.out.println("Erro ao deletar cliente: " + e.getMessage());
         }
     }
-    //para seguir com a exclusão de cliente eu preciso de uma lista de todos os pets de cliente e uma lista de todos agendamentos desses pets, preciso primeiro excluir todos agendamentos de todos os pets e depois, excluir os pets, então assim eu posso sefguir para a venda, tenho que também excluir todas as vendas relacionadas a esse cliente para poder prosseguir com a exclusão de maneira certa e guiada ao usuario!
+    //para seguir com a exclusão de cliente eu preciso de uma lista de todos os pets de cliente e uma lista de todos agendamentos desses pets, preciso primeiro excluir todos agendamentos de todos os pets e depois, excluir os pets, então assim eu posso seguir para a venda, tenho que também excluir todas as vendas relacionadas a esse cliente para poder prosseguir com a exclusão de maneira certa e guiada ao usuario!
 }

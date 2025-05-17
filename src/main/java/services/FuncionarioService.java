@@ -1,13 +1,11 @@
 package services;
 
-import entities.Cliente;
 import entities.Funcionario;
 import enums.TiposDeCargoFuncionario;
 
 import java.util.List;
 
 public interface FuncionarioService {
-
 
     void cadastrarFuncionario(Funcionario funcionario);
     List<Funcionario> listarFuncionarios();

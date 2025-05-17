@@ -23,7 +23,7 @@ public class MenuProduto {
     private ProdutoServiceImpl produtoService = new ProdutoServiceImpl();
     private VendaServiceImpl vendaService = new VendaServiceImpl();
     private ItemVendaService itemVendaService = new ItemVendaServiceImpl();
-
+    private MenuRelatorios menuRelatorios = new MenuRelatorios();
     public void menuProduto()throws Exception{
 
         while (true) {
@@ -59,7 +59,7 @@ public class MenuProduto {
                         realizarVenda();
                         break;
                     case 6:
-
+                        menuRelatorios.relatorioVendas();
                         break;
                     case 0:
                         System.err.println("Voltando....");

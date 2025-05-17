@@ -93,7 +93,6 @@ public class ServicoDaoJDBC implements ServicoDao {
         }catch (SQLException e){
             throw new DbExceptions("Erro ao deletar serviço: " + e.getMessage());
         }
-
     }
 
     @Override
@@ -186,5 +185,4 @@ public class ServicoDaoJDBC implements ServicoDao {
         servico.setId(id);
         return servico;
     }
-
 }

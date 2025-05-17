@@ -13,6 +13,4 @@ public interface ServicoVacinacaoDao {
     ServicoVacinacao findById(Integer id);
     List<ServicoVacinacao> findAll();
     ServicoVacinacao findByUniqueAtributs(String nome, String descricao, TiposDeVacinacao tiposDeVacinacao);
-
-
 }

@@ -11,5 +11,4 @@ public interface AgendamentoService {
     void excluirAgendamentoById(Integer id);
     List<Agendamento> listarAgendamentos();
     Agendamento buscarAgendamentoById(Integer id);
-
 }

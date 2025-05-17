@@ -34,13 +34,11 @@ public class VendaDaoJDBC implements VendaDao {
 
         MetodoDePagamento metodoPagamento = metodoDePagamentoDao.findByTipo(tipoPagamentoVenda);
 
-
         if (metodoPagamento == null) {
             throw new DbExceptions("Método de pagamento não encontrado: " + tipoPagamentoVenda);
         }
 
         venda.setMetodoPagamentoId(metodoPagamento.getId()); // Seta o ID na entidade Venda
-
 
         String sql = "INSERT INTO venda "
                 +"(data_venda, valor_total, cliente_id, metodo_pagamento_id) "
@@ -118,7 +116,7 @@ public class VendaDaoJDBC implements VendaDao {
         PreparedStatement st = null;
         ResultSet rs = null;
         try{
-            //alerta de script extenso, pois tem cliente e metodo de pagamento associado a vendas.. e consequentemente um endereço associado ao cliente, e como eu quero imprimir um relatorio com todas informações certinhas, eu preciso colocar todas essas informções nos mues finds!
+            //alerta de script extenso, pois tem cliente e metodo de pagamento associado a vendas.. e consequentemente um endereço associado ao cliente, e como eu quero imprimir um relatorio com todas informações certinhas, eu preciso colocar todas essas informções nos meus finds!
 
             String sql ="SELECT v.id AS venda_id, " +
                     "v.data_venda, " +
@@ -210,7 +208,7 @@ public class VendaDaoJDBC implements VendaDao {
                 Integer enderecoId = rs.getInt("endereco_id"); //atribuo o id do resultSET do endereço para a chave do meu MAP
                 Endereco endereco = enderecoMap.get(enderecoId);
 
-                //aqui atribuimos o par chave\valor ao objeto endereço, e ai que entra a magica do Map, pois ele vai buscar os valores por pares de acordo com a chave que é o ID, então se a chave (ID) tiver algum valor de objeto endereço atribuido a ela, ja ira retornar direto esse valor, sem duplicar o valor!  Mas agora se for um valor novo que essa chave não tem nenhum valor atribuido ainda e for nulo, caira no if e sera atribuido um novo endereço de acoroo com o que vier no ResultSet! e mandamos esse valor para a List<Vendas> evitando duplicação de Endereco, e faremos isso com os outros Maps, assim evitando a duplicação de qualquer entidade no metodo !!
+                //aqui atribuimos o par chave\valor ao objeto endereço, e ai que entra a magica do Map, pois ele vai buscar os valores por pares de acordo com a chave que é o ID, então se a chave (ID) tiver algum valor de objeto endereço atribuido a ela, ja ira retornar direto esse valor, sem duplicar o valor!  Mas agora se for um valor novo que essa chave não tem nenhum valor atribuido ainda e for nulo, caira no if e sera atribuido um novo endereço de acordo com o que vier no ResultSet! e mandamos esse valor para a List<Vendas> evitando duplicação de Endereco, e faremos isso com os outros Maps, assim evitando a duplicação de qualquer entidade no metodo !!
 
                 if(endereco == null){
                     endereco = instantiateEndereco(rs);
@@ -303,7 +301,6 @@ public class VendaDaoJDBC implements VendaDao {
     @Override
     public List<Venda> findVendasByClienteCpf(String cpf) {
 
-
         PreparedStatement st = null;
         ResultSet rs = null;
 
@@ -334,6 +331,84 @@ public class VendaDaoJDBC implements VendaDao {
 
             st = conn.prepareStatement(sql);
             st.setString(1, cpf);
+
+            rs = st.executeQuery();
+
+            Map<Integer, Endereco> enderecoMap = new HashMap<>();
+            Map<Integer, Cliente> clienteMap = new HashMap<>();
+            Map<Integer, MetodoDePagamento> metodoDePagamentoMap = new HashMap<>();
+            List<Venda> vendas = new ArrayList<>();
+
+            while(rs.next()){
+
+                Integer enderecoId = rs.getInt("endereco_id");
+                Endereco endereco = enderecoMap.get(enderecoId);
+
+                if(endereco == null){
+                    endereco = instantiateEndereco(rs);
+                    enderecoMap.put(enderecoId, endereco);
+                }
+
+                Integer clienteId = rs.getInt("cliente_id");
+                Cliente cliente = clienteMap.get(clienteId);
+                if(cliente == null){
+                    cliente = instantiateCliente(rs, endereco);
+                    clienteMap.put(clienteId, cliente);
+                }
+
+                Integer metodoDePagamentoId = rs.getInt("metodo_pagamento_id");
+                MetodoDePagamento metodoDePagamento = metodoDePagamentoMap.get(metodoDePagamentoId);
+                if(metodoDePagamento == null){
+                    metodoDePagamento = instantiateMetodoDePagamento(rs);
+                    metodoDePagamentoMap.put(metodoDePagamentoId, metodoDePagamento);
+                }
+                Venda venda = instantiateVenda(rs, cliente);
+                vendas.add(venda);
+            }
+            return vendas;
+
+        }catch (SQLException e){
+            throw new DbExceptions("Erro ao buscar vendas: " + e.getMessage());
+        }finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+    }
+
+    @Override
+    public List<Venda> findVendasByMonthAndYear(Integer month, Integer year) {
+
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try{
+            String sql ="SELECT v.id AS venda_id, " +
+                    "v.data_venda, " +
+                    "v.valor_total, " +
+                    "c.id AS cliente_id, " +
+                    "c.nome AS cliente_nome, " +
+                    "c.cpf AS cliente_cpf, " +
+                    "c.email AS cliente_email, " +
+                    "c.telefone AS cliente_telefone, " +
+                    "e.id AS endereco_id, " +
+                    "e.rua AS endereco_rua, " +
+                    "e.numero AS endereco_numero, " +
+                    "e.bairro AS endereco_bairro, " +
+                    "e.cidade AS endereco_cidade, " +
+                    "e.estado AS endereco_estado, " +
+                    "e.cep AS endereco_cep, " +
+                    "e.complemento AS endereco_complemento, " +
+                    "mp.id AS metodo_pagamento_id, " +
+                    "mp.tipo AS metodo_pagamento_tipo " +
+                    "FROM venda v " +
+                    "INNER JOIN cliente c ON v.cliente_id = c.id " +
+                    "INNER JOIN endereco e ON c.endereco_id = e.id " +
+                    "INNER JOIN metodo_pagamento mp ON v.metodo_pagamento_id = mp.id "+
+                    "WHERE MONTH(v.data_venda) = ? AND YEAR(v.data_venda) = ?";
+            st = conn.prepareStatement(sql);
+
+            st.setInt(1, month);
+            st.setInt(2, year);
 
             rs = st.executeQuery();
 
@@ -420,5 +495,4 @@ public class VendaDaoJDBC implements VendaDao {
 
         return metodoDePagamento;
     }
-
 }

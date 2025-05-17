@@ -13,7 +13,4 @@ public interface ProdutoDao {
     Produto findById(Integer id);
     List<Produto> findAll();
     Produto findByUniqueAtributs(String nome, String descricao, String fornecedor);
-    //achar produtos pelas caracteristicas de nome, descrição e forncedor! elas tem que ser unicas!
-
-
 }

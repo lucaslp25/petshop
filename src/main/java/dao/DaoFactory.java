@@ -24,7 +24,7 @@ public class DaoFactory {
     }
     public static ServicoBanhoDao createServicoBanhoDao() {
         return new ServicoBanhoDaoJDBC(DB.getConnection(), createServicoDao());
-        // aqui já é diferente a dependencia, já é mais forte, o ServicoBandoDao depende alem do conector, mas tambem do servico (superclasse) e dos seus respectivos atributos para ser inicializado.. isso força um programa mais, robusto.. um pouco mais acoplado nessa relaçãa, mas fica mais forte e menos propenso a erros!
+        // aqui já é diferente a dependencia, já é mais forte, o ServicoBanhoDao depende alem do conector, mas tambem do servico (superclasse) e dos seus respectivos atributos para ser inicializado.. isso força um programa mais, robusto.. um pouco mais acoplado nessa relaçãa, mas fica mais forte e menos propenso a erros!
     }
     public static ServicoTosaDao createServicoTosaDao() {
         return new ServicoTosaDaoJDBC(DB.getConnection(), createServicoDao());

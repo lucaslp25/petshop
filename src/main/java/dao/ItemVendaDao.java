@@ -16,7 +16,5 @@ public interface ItemVendaDao {
     List<ItemVenda> findAll();
     ItemVenda findByUniqueAtributs(Double precoUnitario, Integer quantidade, Venda venda);
     List<ItemVenda> findByVendaId(Integer Id);
-
-
     void insert2(ItemVenda itemVenda);
 }

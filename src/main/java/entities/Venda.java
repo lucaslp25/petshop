@@ -3,6 +3,7 @@ package entities;
 import enums.TipoDePagamento;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Venda {
@@ -15,6 +16,8 @@ public class Venda {
 
     private MetodoDePagamento meioDePagamento;
     private List<ItemVenda> itensVendidos;
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public Venda() {
     }
@@ -69,6 +72,17 @@ public class Venda {
         return meioDePagamento;
     }
 
+    public String toRelatorioString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID DA VENDA: " + id + "\n");
+        sb.append("Data: " + dataVenda.format(formatter) + "\n");
+        sb.append("Valor: " + String.format("%.2f",valorTotal) + "\n");
+        sb.append("Cliente: " + cliente.getNome() + "| CPF: " + cliente.getCpf() + "\n");
+        sb.append("Método de pagamento ID: " + metodoPagamentoId + "\n");
+
+        return sb.toString();
+    }
+
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
@@ -78,5 +92,4 @@ public class Venda {
 
         return sb.toString();
     }
-
 }

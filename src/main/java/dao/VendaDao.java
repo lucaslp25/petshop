@@ -17,4 +17,5 @@ public interface VendaDao {
     List<Venda> findAll();
     Venda findByUniqueAtributs(LocalDate dataVenda, Double valorTotal, Cliente cliente, Integer metodoPagamentoId);
     List<Venda> findVendasByClienteCpf(String cpf);
+    List<Venda> findVendasByMonthAndYear(Integer month, Integer year);
 }

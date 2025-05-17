@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface ServicoConsultaVeterinariaService {
 
-
     void cadastrarServicoConsultaVeterinaria(ServicoConsultaVeterinaria consultaVeterinaria);
     void alterarServicoConsultaVeterinaria(ServicoConsultaVeterinaria consultaVeterinaria);
     void excluirServicoConsultaVeterinaria(Integer id);

@@ -39,7 +39,7 @@ public class PetDaoJDBC implements PetDao {
             st.setString(1, pet.getNome());
             st.setString(2, pet.getEspecie().name());  //pegando o nome da constante dos enums
             st.setString(3, pet.getRaca());
-            st.setString(4,pet.getPorte().name()); //pegando o nome da constante dos enums
+            st.setString(4,pet.getPorte().name());
             st.setInt(5, pet.getDono().getId());
             st.setInt(6, pet.getIdade());
 
@@ -278,7 +278,6 @@ public class PetDaoJDBC implements PetDao {
     @Override
     public List<Pet> findByCpfDono(String cpf) {
 
-
         PreparedStatement st = null;
         ResultSet rs = null;
         try{
@@ -290,7 +289,6 @@ public class PetDaoJDBC implements PetDao {
                     + "INNER JOIN cliente ON pet.cliente_id = cliente.id "
                     + "INNER JOIN endereco ON cliente.endereco_id = endereco.id "
                     + "WHERE cliente.cpf = ? ";
-
 
             st = conn.prepareStatement(sql);
             st.setString(1, cpf);
@@ -361,7 +359,7 @@ public class PetDaoJDBC implements PetDao {
         pet.setEspecie(TiposDeEspecies.valueOf(rs.getString("especie")));
         //enums fica desse jeito a conversão
         pet.setRaca(rs.getString("raca"));
-        pet.setPorte(CategoriaDePorte.valueOf(rs.getString("porte")));  //possivel tratamento de erros futuro aqui
+        pet.setPorte(CategoriaDePorte.valueOf(rs.getString("porte")));
         pet.setDono(cliente);
         pet.setIdade(rs.getInt("idade"));
         return pet;

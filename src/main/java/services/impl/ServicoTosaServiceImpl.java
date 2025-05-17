@@ -20,7 +20,6 @@ public class ServicoTosaServiceImpl implements ServicoTosaService {
             throw new ExceptionEntitieNotFound("ServicoTosa nulo!");
         }
         servicoTosaDao.insert(servicoTosa);
-
     }
 
     @Override

@@ -11,5 +11,4 @@ public interface ServicoVacinacaoService {
     void excluirServicoVacinacao(Integer id);
     List<ServicoVacinacao> listarServicoVacinacao();
     ServicoVacinacao buscarPorId(Integer id);
-
 }

@@ -11,6 +11,4 @@ public interface VendaService {
     void deleteVendaById(Integer id);
     List<Venda> listarVendas();
     Venda buscarVendaById(Integer id);
-
-
 }

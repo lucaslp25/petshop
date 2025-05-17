@@ -165,7 +165,6 @@ public class ItemVendaDaoJDBC implements ItemVendaDao {
         ResultSet rs = null;
 
         try{
-
             String sql = "SELECT " +
                     "iv.id AS item_id, " +
                     "iv.quantidade, " +
@@ -507,5 +506,4 @@ public class ItemVendaDaoJDBC implements ItemVendaDao {
         itemVenda.setServicos(servico);
         return itemVenda;
     }
-
 }

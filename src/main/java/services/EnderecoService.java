@@ -9,5 +9,4 @@ public interface EnderecoService {
     void cadastrarEndereco(Endereco endereco);
     List<Endereco> listarEnderecos();
     Endereco buscarPorAtributos(Endereco endereco);
-
 }

@@ -45,7 +45,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
                 }
                 DB.closeResultSet(rs);
             }else{
-                throw new DbExceptions("Erro ao inserir produto: falha ao inserir linha na tabela.");   //um pouco mais especifica a mensagem
+                throw new DbExceptions("Erro ao inserir produto: falha ao inserir linha na tabela.");
             }
         }catch (SQLException e){
             throw new DbExceptions("Erro ao inserir produto! " + e.getMessage());
@@ -167,7 +167,6 @@ public class ProdutoDaoJDBC implements ProdutoDao {
             DB.closeStatement(st);
             DB.closeResultSet(rs);
         }
-
     }
 
     @Override

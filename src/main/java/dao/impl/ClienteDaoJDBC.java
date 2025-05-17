@@ -73,7 +73,6 @@ public class ClienteDaoJDBC implements ClienteDao {
             throw new DbExceptions("Erro ao atualizar cliente: " + e.getMessage());
         }
     }
-
     //deletar cliente por id!
     @Override
     public void deleteById(Integer id) {
@@ -267,7 +266,7 @@ public class ClienteDaoJDBC implements ClienteDao {
         }
     }
 
-    //METODOS PARA AS INSTANCIACOES DE CLIENTE E ENDERECO PARA FACILITAR O USO NOS CODIGOS ACIMA, E DEIXAR MAIS FLEXIVEL, E MAIS LIMPO!
+    //METODOS PARA AS INSTANCIACOES DE CLIENTE E ENDERECO PARA FACILITAR O USO NOS CODIGOS ACIMA, DEIXAR MAIS FLEXIVEL, E MAIS LIMPO!
 
     private Cliente instantiateCliente(ResultSet rs, Endereco endereco) throws SQLException{
         //Propagando as exceções pois já estou tratando nos outros metodos

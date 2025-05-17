@@ -12,9 +12,5 @@ public interface ServicoConsultaVeterinariaDao {
     void deleteById(Integer id);
     ServicoConsultaVeterinaria findById(Integer id);
     List<ServicoConsultaVeterinaria> findAll();
-
     ServicoConsultaVeterinaria findByUniqueAtributs(String nome, String descricao, Double preco, TiposDeConsultaVeterinaria tiposDeConsultaVeterinaria);
-
-
-
 }

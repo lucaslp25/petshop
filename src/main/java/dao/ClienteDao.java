@@ -14,5 +14,4 @@ public interface ClienteDao {
      List<Cliente> findClienteByCidade(String cidade);
      List<Cliente> findAll();
      Cliente findByCPF(String cpf);
-
 }

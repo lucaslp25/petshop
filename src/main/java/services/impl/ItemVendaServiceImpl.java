@@ -47,7 +47,6 @@ public class ItemVendaServiceImpl implements ItemVendaService {
         if (id == null) {
             throw new ExceptionEntitieNotFound("ID Nulo");
         }
-
         ItemVenda itemVenda = itemVendaDao.findById(id);
 
         if (itemVenda == null) {
@@ -72,7 +71,6 @@ public class ItemVendaServiceImpl implements ItemVendaService {
         if (id == null) {
             throw new ExceptionEntitieNotFound("ID Nulo");
         }
-
         ItemVenda itemVenda = itemVendaDao.findById(id);
 
         if (itemVenda == null) {

@@ -567,6 +567,94 @@ public class AgendamentoDaoJDBC implements AgendamentoDao {
         }
     }
 
+    @Override
+    public List<Agendamento> findByMonthAndYear(Integer month, Integer year) {
+
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try{
+            String sql = "SELECT " +
+                    "a.id AS agendamento_id, " +
+                    "a.data_hora AS data_hora_agendamento, " +
+                    "a.valor AS agendamento_valor, " +
+                    "f.id AS funcionario_id, " +
+                    "f.nome AS funcionario_nome, " +
+                    "pet.id AS pet_id, " +
+                    "pet.nome AS pet_nome, " +
+                    "s.id AS servico_id, " +
+                    "s.nome AS servico_nome, " +
+                    "s.preco AS servico_preco, " +
+                    "s.tipo_servico AS tipo_servico, " +
+                    "c.id AS cliente_id, " +
+                    "c.nome AS cliente_nome, " +
+                    "c.cpf AS cliente_cpf " +
+                    "FROM " +
+                    "agendamento a " +
+                    "INNER JOIN " +
+                    "funcionario f ON a.funcionario_id = f.id " +
+                    "INNER JOIN " +
+                    "pet ON a.pet_id = pet.id " +
+                    "INNER JOIN " +
+                    "servico s ON a.servico_id = s.id " +
+                    "INNER JOIN " +
+                    "cliente c ON pet.cliente_id = c.id " +
+                    "WHERE MONTH(a.data_hora) = ? AND YEAR(a.data_hora) = ?";
+
+            st = conn.prepareStatement(sql);
+
+            st.setInt(1, month);
+            st.setInt(2, year);
+
+            rs = st.executeQuery();
+
+            List<Agendamento> agendamentos = new ArrayList<>();
+            Map<Integer, Cliente> clienteMap = new HashMap<>();
+            Map<Integer, Pet> petMap = new HashMap<>();
+            Map <Integer, Funcionario> funcionarioMap = new HashMap<>();
+            Map<Integer, Servicos> servicoMap = new HashMap<>();
+
+            while(rs.next()){
+
+                Integer clienteId = rs.getInt("cliente_id");
+                Cliente cliente = clienteMap.get(clienteId);
+
+                if (cliente == null){
+                    cliente = instantiateCliente(rs);
+                    clienteMap.put(clienteId, cliente);
+                }
+
+                Integer petId = rs.getInt("pet_id");
+                Pet pet2 = petMap.get(petId);
+                if (pet2 == null){
+                    pet2 = instantiatePet(rs, cliente);
+                    petMap.put(petId, pet2);
+                }
+
+                Integer funcionarioId = rs.getInt("funcionario_id");
+                Funcionario funcionario = funcionarioMap.get(funcionarioId);
+                if (funcionario == null){
+                    funcionario = instantiateFuncionario(rs);
+                    funcionarioMap.put(funcionarioId, funcionario);
+                }
+
+                Integer servicoId = rs.getInt("servico_id");
+                Servicos servico = servicoMap.get(servicoId);
+                if (servico == null){
+                    servico = instantiateServico(rs);
+                    servicoMap.put(servicoId, servico);
+                }
+                Agendamento agendamento = instantiateAgendamento(rs, funcionario, pet2, servico);
+                agendamentos.add(agendamento);
+            }
+            return agendamentos;
+        }catch (SQLException e){
+            throw new DbExceptions("Erro ao buscar agendamentos: " + e.getMessage());
+        }finally {
+            DB.closeResultSet(rs);
+            DB.closeStatement(st);
+        }
+    }
+
     private Agendamento instantiateAgendamento(ResultSet rs, Funcionario funcionario, Pet pet, Servicos servico) throws SQLException {
         Agendamento agendamento = new Agendamento();
         agendamento.setId(rs.getInt("agendamento_id"));
@@ -578,7 +666,6 @@ public class AgendamentoDaoJDBC implements AgendamentoDao {
 
         return agendamento;
     }
-
 
     private Funcionario instantiateFuncionario(ResultSet rs)throws SQLException {
 
@@ -634,9 +721,6 @@ public class AgendamentoDaoJDBC implements AgendamentoDao {
                     throw new DbExceptions("Nenhum serviço com este tipo encontrado!");
             }
                 servico.setId(id);
-
         return servico;
     }
-
-
 }

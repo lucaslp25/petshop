@@ -38,7 +38,6 @@ public class ServicoConsultaVeterinariaServiceImpl implements ServicoConsultaVet
         if (servicoConsultaVeterinaria == null) {
             throw new ExceptionEntitieNotFound("Nenhum serviço encontrado com o ID: " + id);
         }
-
         servicoConsultaVeterinariaDao.deleteById(id);
     }
 
@@ -60,7 +59,6 @@ public class ServicoConsultaVeterinariaServiceImpl implements ServicoConsultaVet
         if (servicoConsultaVeterinaria == null) {
             throw new ExceptionEntitieNotFound("Nenhum serviço encontrado com o ID: " + id);
         }
-
         return servicoConsultaVeterinariaDao.findById(id);
     }
 }

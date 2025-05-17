@@ -62,11 +62,21 @@ public class Agendamento {
         this.valor = valor;
     }
 
+    public String toRelatorioString (){
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID DO AGENDAMENTO: " + getId() + "\n");
+        sb.append("DATA DO AGENDAMENTO: " + getDataAgendamento() + "\n");
+        sb.append("NOME DO SERVIÇO: " + getServicos().getNome() + "\n");
+        sb.append("PREÇO DO SERVIÇO: " + String.format("%.2f",getServicos().getPreco()) + "\n");
+        sb.append("TIPO DE SERVIÇO: " + getServicos().getTipo() + "\n");
+        sb.append("PET: " + getPet().getNome() + " | RESPONSÁVEL: " +getPet().getDono().getNome() + "\n" );
+        sb.append("FUNCIONARIO RESPONSAVEL PELO AGENDAMENTO: " + getFuncionarioResponsavel().getNome() + "\n");
+        return sb.toString();
+    }
+
     @Override
     public String toString(){
 
         return "DATA: " + dataAgendamento + "\nSERVICOS: " + servicos + "\nPET: " + pet + "\nFUNCIONARIO: " + funcionarioResponsavel.getNome() + " - " + funcionarioResponsavel.getCargoFuncionario();
-
     }
-
 }

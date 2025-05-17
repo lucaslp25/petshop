@@ -11,5 +11,4 @@ public interface MetodoPagamentoService {
      List<MetodoDePagamento> listarTodos();
      void atualizarMetodo(MetodoDePagamento metodoDePagamento);
      void removerPorId(Integer id);
-
 }

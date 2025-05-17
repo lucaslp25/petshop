@@ -66,5 +66,4 @@ public class ProdutoServiceImpl implements ProdutoService {
         }
         return produtoDao.findById(id);
     }
-
 }

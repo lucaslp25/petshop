@@ -9,5 +9,4 @@ public interface ServicoTosaService {
     void excluirServicoTosa(Integer id);
     List<ServicoTosa> listarServicoTosa();
     ServicoTosa buscarPorId(Integer id);
-
 }

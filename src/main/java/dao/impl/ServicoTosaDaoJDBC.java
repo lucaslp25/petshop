@@ -21,7 +21,6 @@ public class ServicoTosaDaoJDBC implements ServicoTosaDao {
         this.servicoDao = servicoDao;
     }
 
-
     @Override
     public void insert(ServicoTosa servico) {
 
@@ -32,7 +31,6 @@ public class ServicoTosaDaoJDBC implements ServicoTosaDao {
                 + "VALUES (?, ?, ?)";
 
         try(PreparedStatement st = conn.prepareStatement(sql)){
-            //Return GENERETED KEYS não necessaria nesse caso
 
             st.setInt(1, servico.getId());
             st.setBoolean(2, servico.isIncluiEscovacao());
@@ -41,7 +39,6 @@ public class ServicoTosaDaoJDBC implements ServicoTosaDao {
             int rows = st.executeUpdate();
             if(rows > 0){
                 System.out.println("Serviço de tosa inserido com sucesso! ID: " + servico.getId());
-                //Pois o id será o mesmo do serviços!!
             }else{
                 throw new DbExceptions("Erro inesperado ao inserir serviço de tosa!");
             }
@@ -73,8 +70,6 @@ public class ServicoTosaDaoJDBC implements ServicoTosaDao {
 
     @Override
     public void deleteById(Integer id) {
-
-       // servicoDao.deleteById(id); problema de integridade ao fazer essa chamada
 
         String sql = "DELETE FROM servico_tosa WHERE servico_id = ?";
 

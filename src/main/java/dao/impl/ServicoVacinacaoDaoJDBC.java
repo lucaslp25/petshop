@@ -70,8 +70,6 @@ public class ServicoVacinacaoDaoJDBC implements ServicoVacinacaoDao {
     @Override
     public void deleteById(Integer id) {
 
-       // servicoDao.deleteById(id);    problema de integridade aqui
-
         String sql = "DELETE FROM servico_vacinacao WHERE servico_id = ?";
 
         try(PreparedStatement st = conn.prepareStatement(sql)){
@@ -155,7 +153,6 @@ public class ServicoVacinacaoDaoJDBC implements ServicoVacinacaoDao {
 
     @Override
     public ServicoVacinacao findByUniqueAtributs(String nome, String descricao, TiposDeVacinacao tiposDeVacinacao) {
-
 
         PreparedStatement st = null;
         ResultSet rs = null;

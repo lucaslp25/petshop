@@ -92,7 +92,6 @@ public class ServicoBanhoDaoJDBC implements ServicoBanhoDao {
         }catch (SQLException e){
             throw new DbExceptions("Erro ao deletar serviço: " + e.getMessage());
         }
-
     }
 
     @Override
@@ -201,7 +200,6 @@ public class ServicoBanhoDaoJDBC implements ServicoBanhoDao {
     }
 
     private ServicoBanho instantiateServicoBanho(ResultSet rs) throws SQLException {
-
         ServicoBanho servicoBanho = new ServicoBanho();
 
         servicoBanho.setId(rs.getInt("servico_id"));
@@ -211,19 +209,6 @@ public class ServicoBanhoDaoJDBC implements ServicoBanhoDao {
         servicoBanho.setDuracao(Duration.ofMinutes(rs.getLong(("servico_duracao"))));
         servicoBanho.setComHidratacao(rs.getBoolean("com_hidratacao"));
 
-        /*
-        Integer id = rs.getInt("servico_id");
-        String nome = rs.getString("servico_nome");
-        String descricao = rs.getString("servico_descricao");
-        Double preco = rs.getDouble("servico_preco");
-        Duration duracao = Duration.ofMinutes(rs.getLong("servico_duracao"));
-        Boolean comHidratacao = rs.getBoolean("com_hidratacao");
-
-        ServicoBanho servicoBanho = new ServicoBanho(nome, descricao, preco, duracao, comHidratacao);
-        servicoBanho.setId(id);
-
-         */
         return servicoBanho;
     }
-
 }

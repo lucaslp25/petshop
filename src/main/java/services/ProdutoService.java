@@ -11,6 +11,4 @@ public interface ProdutoService {
     void excluirProduto(Integer id);
     List<Produto> listarProduto();
     Produto buscarPorId(Integer id);
-
-
 }
