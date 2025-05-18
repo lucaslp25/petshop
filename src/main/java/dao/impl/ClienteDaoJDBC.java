@@ -228,7 +228,7 @@ public class ClienteDaoJDBC implements ClienteDao {
             }
             return clientes;
         }catch(SQLException e){
-            throw new DbExceptions("Erro ao inserir cliente: " + e.getMessage());
+            throw new DbExceptions("Erro ao listar cliente: " + e.getMessage());
         }finally{
             DB.closeStatement(st);
             DB.closeResultSet(rs);

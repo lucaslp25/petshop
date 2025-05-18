@@ -48,5 +48,4 @@ public class DaoFactory {
     public static AgendamentoDao createAgendamentoDao() {
         return new AgendamentoDaoJDBC(DB.getConnection());
     }
-
 }

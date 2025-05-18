@@ -31,3 +31,5 @@ bin/
 
 db.properties
 src/test/db.test.properties
+src/test/db.test2.properties
+db.test2.properties

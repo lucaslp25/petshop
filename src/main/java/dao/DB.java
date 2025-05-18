@@ -11,7 +11,7 @@ public class DB {
     private static Connection conn = null;
 
     public static Properties loadProperties(){
-        try(FileInputStream fs = new FileInputStream("db.properties")){
+        try(FileInputStream fs = new FileInputStream("db.test2.properties")){
             Properties props = new Properties();    //instanciando as propriedades
             props.load(fs); //carregando o que foi lido das propriedades
             return props;
@@ -47,6 +47,7 @@ public class DB {
             }
         }
     }
+
     public static void closeStatement(Statement st) {
         if (st != null) {
             try{
@@ -66,7 +67,6 @@ public class DB {
             }
         }
     }
-
 }
 
 
