@@ -1,5 +1,10 @@
 -- Criação do banco de dados com o nome que desejar
-CREATE DATABASE super_petshop;  -- <--aqui pode alterar o nome do database antes de correr a query!
+
+CREATE DATABASE IF NOT EXISTS super_pet_shop;  -- <--aqui pode alterar o nome do database antes de correr a query!
+
+       -- Porém se for mudar o nome do database, lembre se de mudar no USE também!
+
+USE super_pet_shop;
 
 -- tabela do endereço
 CREATE TABLE endereco (
