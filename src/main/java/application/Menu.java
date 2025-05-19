@@ -934,6 +934,8 @@ public class Menu {
                     Integer op2 = sc.nextInt();
                     sc.nextLine();
 
+
+
                     switch (op2){
                         case 1:
                             int c1 = 0;
@@ -983,7 +985,7 @@ public class Menu {
                                 ids.add(vendas.getId());
                             }
                             if (ids.isEmpty()){
-                                throw new ExceptionEntitieNotFound("Nenhuma venda encontrada para este cliente!");
+                                System.out.println("Nenhuma Venda para excluir!");
                             }else{
                                 c3 = 0; //esta em outro escopo esse contador
                                 for (int i = 0; i < ids.size(); i++) {

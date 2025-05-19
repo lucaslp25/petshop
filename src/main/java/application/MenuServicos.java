@@ -864,6 +864,7 @@ public class MenuServicos {
             System.out.println("Serviços de Vacinação cadastrados: (max 10)\n");
             for (ServicoVacinacao servicoVacinacao1 : servicoVacinacao) {
                 System.out.println(servicoVacinacao1);
+                System.out.println("Tipo de Vacina: " + servicoVacinacao1.getTipoDeVacinacao());
                 System.out.println("ID: " + servicoVacinacao1.getId());
                 System.out.println();
                 i3++;
@@ -876,6 +877,7 @@ public class MenuServicos {
             System.out.println("Serviços de Consultas veterinarias cadastradas: (max 10)\n");
             for (ServicoConsultaVeterinaria servicoConsultaVeterinarias1 : servicoConsultaVeterinarias) {
                 System.out.println(servicoConsultaVeterinarias1);
+                System.out.println("Tipo de Consulta: " + servicoConsultaVeterinarias1.getTipoDeConsulta());
                 System.out.println("ID: " + servicoConsultaVeterinarias1.getId());
                 System.out.println();
                 i4++;

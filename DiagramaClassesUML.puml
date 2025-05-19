@@ -1,0 +1,308 @@
+@startuml
+
+package "entities" {
+
+class Endereco {
+  - id: Integer
+  - rua: String
+  - numero: String
+  - bairro: String
+  - cidade: String
+  - estado: String
+  - cep: String
+  - complemento: String
+}
+
+class Cliente {
+  - id: Integer
+  - nome: String
+  - telefone: String
+  - email: String
+  - endereco: Endereco
+  - pets: List<Pet>
+}
+
+class Pet {
+  - id: Integer
+  - nome: String
+  - especie: String
+  - dono: Cliente
+}
+
+class Funcionario {
+  - id: Integer
+  - nome: String
+  - cargo: String
+}
+
+class Agendamento {
+  - id: Integer
+  - dataAgendamento: LocalDate
+  - pet: Pet
+  - servico: Servico
+  - funcionarioResponsavel: Funcionario
+  - valor: Double
+}
+
+abstract class Servico {
+  - id: Integer
+  - nome: String
+  - preco: Double
+  - tipo: String
+}
+
+class ServicoBanho extends Servico {
+  - comHidratacao: Boolean
+}
+
+class ServicoTosa extends Servico {
+  - incluiEscovacao: Boolean
+  - incluiBanhoPrevio: Boolean
+}
+
+class ServicoVacinacao extends Servico {
+  - tiposDeVacinacao: TipoDeVacinacao
+}
+
+class ServicoConsultaVeterinaria extends Servico {
+  - tipoDeConsulta: TiposDeConsultaVeterinaria
+}
+
+class Venda {
+  - id: Integer
+  - data: LocalDate
+  - valorTotal: Double
+  - itens: List<ItemVenda>
+  - metodoDePagamento: MetodoDePagamento
+}
+
+class ItemVenda {
+  - id: Integer
+  - produto: Produto
+  - quantidade: Integer
+  - valorUnitario: Double
+}
+
+class Produto {
+  - id: Integer
+  - nome: String
+  - preco: Double
+  - estoque: Integer
+}
+
+class MetodoDePagamento {
+  - id: Integer
+  - tipoDePagamento: TipoDePagamento
+}
+
+}
+
+package "enums"{
+
+enum TipoDePagamento {
+  DINHEIRO
+  CARTAO_DE_CREDITO
+  CARTAO_DE_DEBITO
+  PIX
+  BOLETO
+}
+
+enum TiposDeVacinacao {
+  OBRIGATORIA
+  RECOMENDADA_CAES
+  RECOMENDADA_ROEDORES
+  RECOMENDADA_GATOS
+  OUTRAS
+}
+
+enum TiposDeConsultaVeterinaria {
+ ROTINA
+ ESPECIALIZADA
+ EMERGENCIA
+ RETORNO
+}
+
+enum TiposDeEspecies {
+  CACHORRO
+  GATO
+  AVES
+  PEIXES
+  PEQUENOS_ROEDORES
+}
+
+enum TiposDeCargoFuncionario {
+  ATENDENTE
+  VENDENDOR
+  VETERINARIO
+  GERENTE
+}
+
+enum CategoriaDeProdutos {
+  BRINQUEDO
+  HIGIENE
+  MEDICAMENTO
+  ALIMENTACAO
+  ACESSORIO
+}
+
+enum CategoriaDePorte {
+  PEQUENO
+  MEDIO
+  GRANDE
+}
+
+}
+
+
+
+Cliente "1" -- "0..*" Pet : possui >
+Cliente "1" -- "1" Endereco : tem um >
+Funcionario "1" -- "1" Endereco : tem um >
+Pet "1" -- "0..*" Agendamento : agendado para  >
+Agendamento "1" -- "1" Servico : agenda um >
+Agendamento "1" -- "1" Funcionario : atendido por >
+Venda "1" -- "1..*" ItemVenda : contém >
+ItemVenda "1" -- "1" Produto : associado >
+Venda "1" -- "1" MetodoDePagamento : pago com >
+MetodoDePagamento --> TipoDePagamento
+ServicoVacinacao --> TiposDeVacinacao
+ServicoConsultaVeterinaria --> TiposDeConsultaVeterinaria
+Pet --> TiposDeEspecies : tipo
+Pet --> CategoriaDePorte : porte
+Funcionario --> TiposDeCargoFuncionario : cargo
+Produto --> CategoriaDeProdutos : categoria
+
+
+package "dao"{
+
+class DaoFactory {
+  + createClienteDao(): ClienteDao
+  + createPetDao(): PetDao
+  + createEnderecoDao(): EnderecoDao
+  + createFuncionarioDao(): FuncionarioDao
+  + createAgendamentoDao(): AgendamentoDao
+  + createProdutoDao(): ProdutoDao
+  + createVendaDao(): VendaDao
+  + createItemVendaDao(): ItemVendaDao
+  + createMetodoDePagamentoDao(): MetodoDePagamentoDao
+  + createServicoDao(): ServicoDao
+  + createServicoBanhoDao(): ServicoBanhoDao
+  + createServicoTosaDao(): ServicoTosaDao
+  + createServicoConsultaVeterinariaDao(): ServicoConsultaVeterinariaDao
+  + createServicoVacinacaoDao(): ServicoVacinacaoDao
+}
+
+interface EnderecoDao
+class EnderecoDaoJDBC implements EnderecoDao
+interface ClienteDao
+class ClienteDaoJDBC implements ClienteDao
+interface PetDao
+class PetDaoJDBC implements PetDao
+interface FuncionarioDao
+class FuncionarioDaoJDBC implements FuncionarioDao
+interface AgendamentoDao
+class AgendamentoDaoJDBC implements AgendamentoDao
+interface ProdutoDao
+class ProdutoDaoJDBC implements ProdutoDao
+interface VendaDao
+class VendaDaoJDBC implements VendaDao
+interface ItemVendaDao
+class ItemVendaDaoJDBC implements ItemVendaDao
+interface MetodoDePagamentoDao
+class MetodoDePagamentoDaoJDBC implements MetodoDePagamentoDao
+interface ServicoDao
+class ServicoDaoJDBC implements ServicoDao
+interface ServicoBanhoDao
+class ServicoBanhoDaoJDBC implements ServicoBanhoDao
+interface ServicoTosaDao
+class ServicoTosaDaoJDBC implements ServicoTosaDao
+interface ServicoConsultaVeterinariaDao
+class ServicoConsultaVeterinariaDaoJDBC implements ServicoConsultaVeterinariaDao
+interface ServicoVacinacaoDao
+class ServicoVacinacaoDaoJDBC implements ServicoVacinacaoDao
+
+class DB {
+  - conn: Connection
+}
+
+class DbExceptions extends RuntimeException
+class DbIntegrityException extends RuntimeException
+
+}
+
+package "service" {
+
+
+interface EnderecoService
+interface ClienteService
+interface PetService
+interface FuncionarioService
+interface AgendamentoService
+interface ProdutoService
+interface VendaService
+interface ItemVendaService
+interface MetodoDePagamentoService
+interface ServicosService
+interface ServicoVacinacaoService
+interface ServicoBanhoService
+interface ServicoTosaService
+interface ServicoConsultaVeterinariaService
+
+class EnderecoServiceImpl implements EnderecoService
+class ClienteServiceImpl implements ClienteService
+class PetServiceImpl implements PetService
+class FuncionarioServiceImpl implements FuncionarioService
+class AgendamentoServiceImpl implements AgendamentoService
+class ProdutoServiceImpl implements ProdutoService
+class VendaServiceImpl implements VendaService
+class ItemVendaServiceImpl implements ItemVendaService
+class MetodoDePagamentoServiceImpl implements MetodoDePagamentoService
+class ServicosServiceImpl implements ServicosService
+class ServicoVacinacaoServiceImpl implements ServicoVacinacaoService
+class ServicoBanhoServiceImpl implements ServicoBanhoService
+class ServicoTosaServiceImpl implements ServicoTosaService
+class ServicoConsultaVeterinariaServiceImpl implements ServicoConsultaVeterinariaService
+
+}
+
+EnderecoServiceImpl ..> DaoFactory : usa
+ClienteServiceImpl ..> DaoFactory : usa
+PetServiceImpl ..> DaoFactory : usa
+FuncionarioServiceImpl ..> DaoFactory : usa
+AgendamentoServiceImpl ..> DaoFactory : usa
+ProdutoServiceImpl ..> DaoFactory : usa
+VendaServiceImpl ..> DaoFactory : usa
+ItemVendaServiceImpl ..> DaoFactory : usa
+MetodoDePagamentoServiceImpl ..> DaoFactory : usa
+ServicosServiceImpl ..> DaoFactory : usa
+ServicoVacinacaoServiceImpl ..> DaoFactory : usa
+ServicoBanhoServiceImpl ..> DaoFactory : usa
+ServicoTosaServiceImpl ..> DaoFactory : usa
+ServicoConsultaVeterinariaServiceImpl ..> DaoFactory : fabrica
+
+package "exceptions"{
+
+class ExceptionCpfAlreadyExists extends RuntimeException
+class ExceptionEntitieNotFound extends RuntimeException
+class ExceptionIncorretDate extends RuntimeException
+class ExceptionInsufficientStock extends RuntimeException
+class ExceptionOfIntegrity extends RuntimeException
+
+}
+
+package "application"{
+class Main
+class MenuRelatorios
+class MenuServicos
+class MenuProduto
+class Menu
+}
+
+Main ..> Menu
+Menu ..> MenuProduto
+Menu ..> MenuServicos
+Menu ..> MenuRelatorios
+MenuRelatorios ..> AgendamentoServiceImpl
+MenuRelatorios ..> VendaServiceImpl
+
+@enduml
